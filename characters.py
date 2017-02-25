@@ -4,6 +4,14 @@ keeping track of all the stats, numbers and calculations that go into an AGE
 based roll playing game. The template that I'm building this off of is Titan's
 Grave. 
 """
+def inputresponse(caption, options)
+    print(caption)
+    print(options)
+    while choice not in options:
+        option = input('')
+    return option
+
+
 class Character:
     """This is the character object that holds a character's attributes"""
     def __init__(self):
@@ -32,7 +40,11 @@ class Character:
 class CharacterClass:
     def __init__(self, character):
         self.character = character
-        self.class_name
+        self.class_name = None
+        self.primary_abilities = None
+        self.secondary_abilities = None
+        self.level_bonuses = None
+
 
 class Abilities:
     def __init__(self, character):
@@ -49,9 +61,91 @@ class Abilities:
         self._level_log: list = []
         
     def level_up(self):
-        if character.character_class.class_name == "Warrior"
-            self.
-        
+        if self.character.level % 2 == 0:
+            available_abilities =\
+                self.character.character_class.primary_abilities
+        else:
+            available_abilities =\
+                    self.character.character_class.secondary_abilities
+        print("Choose an ability to level up")
+        print(available_abilities)
+        good_input = False
+        while good_input is False:
+            try:    
+                choice = good_input("Chose a number ")
+                ability == available_abilities[choice + 1]
+                good_input = True
+            except Exception:
+                print("Bad input")
+        self._level_log.append(ability)
+
+    @property
+    def accuracy(self):
+        levelups = sum(
+            1 if ability == "accuracy" else 0 for ability in self._level_log
+        )
+        reutrn self.accuracy_start + levelups
+
+    @property
+    def communication(self):
+        levelups = sum(
+            1 if ability == "communication" else 0 for ability in self._level_log
+        )
+        reutrn self.communication_start + levelups
+
+    @property
+    def constitution(self):
+        levelups = sum(
+            1 if ability == "constitution" else 0 for ability in self._level_log
+        )
+        reutrn self.constitution_start + levelups
+
+
+    @property
+    def dexterity(self):
+        levelups = sum(
+            1 if ability == "dexterity" else 0 for ability in self._level_log
+        )
+        reutrn self.dexteritystart + levelups
+
+
+    @property
+    def fighting(self):
+        levelups = sum(
+            1 if ability == "fighting" else 0 for ability in self._level_log
+        )
+        reutrn self.fighting_start + levelups
+
+
+    @property
+    def intelligence(self):
+        levelups = sum(
+            1 if ability == "intelligence" else 0 for ability in self._level_log
+        )
+        reutrn self.intelligence_start + levelups
+
+
+    @property
+    def perception(self):
+        levelups = sum(
+            1 if ability == "perception" else 0 for ability in self._level_log
+        )
+        reutrn self.perception_start + levelups
+
+    @property
+    def strength(self):
+        levelups = sum(
+            1 if ability == "strength" else 0 for ability in self._level_log
+        )
+        reutrn self.strength_start + levelups
+
+    @property
+    def willpower(self):
+        levelups = sum(
+            1 if ability == "willpower" else 0 for ability in self._level_log
+        )
+        reutrn self.willpower_start + levelups
+
 
 class Spell:
     def __init__(self):
@@ -71,7 +165,6 @@ class Focus:
         self.ability: str = None
         self.upgrade = None
         self.description: str = None
-        self.universe_availability: str = None  # Which expansion can you find this
 
 
 class Talent:
@@ -86,17 +179,25 @@ class Talent:
 
 
 class Item:
-    def __init__(self):
-        self.item_name: str = None
-        self.weight: float = None
-        self.size: float = None
-        self.value: float = None
+    def __init__(self, name, weight, size, value):
+        self.item_name: str = name
+        self.weight: float = weight
+        self.size: float = size
+        self.value: float = value
         self.hands_to_weild: int = None
 
 
+class Currency(Item):
+    def __init__(self, name, weight, size, value):
+        super().__init__(name, weight, size, value)
+        
+
 class Weapon(Item):
-    def __init__(self):
-        super().__init__()
+    def __init__(
+        self, name, weight, size, value, weapon_group, minimum_strength,
+        min_range, max_range
+    ):
+        super().__init__(name, weight, size, value)
         self._damage_rolls = None
         self._weapon_group = None
         self._minimum_strength = None
