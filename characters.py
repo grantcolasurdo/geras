@@ -4,7 +4,14 @@ keeping track of all the stats, numbers and calculations that go into an AGE
 based roll playing game. The template that I'm building this off of is Titan's
 Grave. 
 """
-def inputresponse(caption, options)
+
+__author__ = "Grant Colasurdo"
+
+import spells
+import talents
+import items
+
+def inputresponse(caption, options):
     print(caption)
     print(options)
     while choice not in options:
@@ -12,39 +19,51 @@ def inputresponse(caption, options)
     return option
 
 
+class Requirement:
+    def __init__(self):
+        pass
+
+    def test(self, character):
+        return False
+
+
 class Character:
     """This is the character object that holds a character's attributes"""
     def __init__(self):
-        self.character_name = None
-        self.max_health = None
-        self.current_health = None
-        self.max_mana = None
-        self.current_mana = None
-        self.level = None
+        self.character_name: str = None
+        self.max_health: int = None
+        self.current_health: int = None
+        self.level: int = None
         self.experience_points = None
-        self.abilities: Abilities = Abilities(self)
-        self.focuses: set = None
+        self.abilities: Abilities = None
+        self.focuses: Focuses = None
+        self.talents: Talents = None
         self.weapon_groups: set = None
         self.talents: set = None
-        self.character_class: CharacterClass  = CharacterClass(self)
+        self.character_class: CharacterClass  = None
         self.specializations: set = None
-        self.race = None
+        self.race: Race = None
+        self.magic: Magic = None
 
         def rest(self):
             self.current_health = self.max_health
             self.current_mana = self.max_mana
 
         def init_new_character(self):
+            """
+            The guidebook layes out the character creation process in 9 points
+            1. Create a character concept
+            2. Determine abilities
+            3. Choose a race
+            4. determine a social class an background
+            5. choose a class
+            6. pick a starting equipment
+            7. calculate defense
+            8. pick a name
+            9. choose goals and character ties for your character
+            """
             pass
-
-class CharacterClass:
-    def __init__(self, character):
-        self.character = character
-        self.class_name = None
-        self.primary_abilities = None
-        self.secondary_abilities = None
-        self.level_bonuses = None
-
+            
 
 class Abilities:
     def __init__(self, character):
@@ -60,45 +79,34 @@ class Abilities:
         self.willpower_start = None
         self._level_log: list = []
         
-    def level_up(self):
-        if self.character.level % 2 == 0:
-            available_abilities =\
-                self.character.character_class.primary_abilities
-        else:
-            available_abilities =\
-                    self.character.character_class.secondary_abilities
-        print("Choose an ability to level up")
-        print(available_abilities)
-        good_input = False
-        while good_input is False:
-            try:    
-                choice = good_input("Chose a number ")
-                ability == available_abilities[choice + 1]
-                good_input = True
-            except Exception:
-                print("Bad input")
-        self._level_log.append(ability)
+    determine_ability_table = {
+        3:-2, 4:-1, 5:-1, 6:0, 7:0, 8:0, 9:1, 10:1, 11:1, 12:2, 13:2,
+        14:2, 15:3, 16:3, 17:3, 18:4
+    }
+
+    def init_character(self):
+        self.accuracy_start = 
 
     @property
     def accuracy(self):
         levelups = sum(
             1 if ability == "accuracy" else 0 for ability in self._level_log
         )
-        reutrn self.accuracy_start + levelups
+        return self.accuracy_start + levelups
 
     @property
     def communication(self):
         levelups = sum(
             1 if ability == "communication" else 0 for ability in self._level_log
         )
-        reutrn self.communication_start + levelups
+        return self.communication_start + levelups
 
     @property
     def constitution(self):
         levelups = sum(
             1 if ability == "constitution" else 0 for ability in self._level_log
         )
-        reutrn self.constitution_start + levelups
+        return self.constitution_start + levelups
 
 
     @property
@@ -106,7 +114,7 @@ class Abilities:
         levelups = sum(
             1 if ability == "dexterity" else 0 for ability in self._level_log
         )
-        reutrn self.dexteritystart + levelups
+        return self.dexteritystart + levelups
 
 
     @property
@@ -114,7 +122,7 @@ class Abilities:
         levelups = sum(
             1 if ability == "fighting" else 0 for ability in self._level_log
         )
-        reutrn self.fighting_start + levelups
+        return self.fighting_start + levelups
 
 
     @property
@@ -122,7 +130,7 @@ class Abilities:
         levelups = sum(
             1 if ability == "intelligence" else 0 for ability in self._level_log
         )
-        reutrn self.intelligence_start + levelups
+        return self.intelligence_start + levelups
 
 
     @property
@@ -130,119 +138,75 @@ class Abilities:
         levelups = sum(
             1 if ability == "perception" else 0 for ability in self._level_log
         )
-        reutrn self.perception_start + levelups
+        return self.perception_start + levelups
 
     @property
     def strength(self):
         levelups = sum(
             1 if ability == "strength" else 0 for ability in self._level_log
         )
-        reutrn self.strength_start + levelups
+        return self.strength_start + levelups
 
     @property
     def willpower(self):
         levelups = sum(
             1 if ability == "willpower" else 0 for ability in self._level_log
         )
-        reutrn self.willpower_start + levelups
+        return self.willpower_start + levelups
 
 
-class Spell:
-    def __init__(self):
-        self._arcana = None
-        self._target_number = 0
-        self._requirement = None
-        self._description = None
-        self._mp_cost = None
-        self._casting_time = None
-        self._test = None
-        self._effect = []
+class Focuses:
+    def __init__(
+        self, character=None, aquired_focuses=None, all_focuses=None
+    ):
+        self.character = character
+        self.aquired_focuses = aquired_focuses
+        self.all_focuses = all_focuses
+
+    def available_focuses(self):
+        """Return a set of focuses that are available to a character in it's
+        current state"""
+        pass
+
+    def aquire_focus(self, focus:Focus):
+        if focus in self.available_focuses():
+            """The focus is available, now do we already have it?"""
+            return_focus(focus).level += 1
+        else:
+            self.aquired_focuses.add(focus(self))
+    
+    def return_focus(self, focus:Focus):
+        focus_list = [
+            individual_focus for individual_focus in self.available_focuses 
+            if isinstance(individual_focus, focus)
+        ]
+        if len(focus_list) == 1:
+            return return_focus[0]
+        else:
+            return None
 
 
 class Focus:
-    def __init__(self):
-        self.focus_name = None
-        self.ability: str = None
-        self.upgrade = None
-        self.description: str = None
-
-
-class Talent:
-    def __init__(self):
-        self.talent_name: str = None
-        self.class_requirement: set = None
-        self.other_requirements: set = None
-        self.description: str = None
-        self.novice_description: str = None
-        self.journeyman_description: str = None
-        self.master_description: str = None
-
-
-class Item:
-    def __init__(self, name, weight, size, value):
-        self.item_name: str = name
-        self.weight: float = weight
-        self.size: float = size
-        self.value: float = value
-        self.hands_to_weild: int = None
-
-
-class Currency(Item):
-    def __init__(self, name, weight, size, value):
-        super().__init__(name, weight, size, value)
-        
-
-class Weapon(Item):
     def __init__(
-        self, name, weight, size, value, weapon_group, minimum_strength,
-        min_range, max_range
+        self, focuses=None, name=None, ability=None, level=None, 
+        description=None
     ):
-        super().__init__(name, weight, size, value)
-        self._damage_rolls = None
-        self._weapon_group = None
-        self._minimum_strength = None
-        self._state = None
-        self._max_range = None
-        self._min_range = None
+        self.focuses:Focuses = focuses
+        self.focus_name: str = name
+        self.ability: str = ability
+        self._level = level
+        self.description: str = None
 
-
-class MissleWeapon(Weapon):
-    def __init__(self):
-        super().__init__()
-        self._missle_used = None
-
-
-class Armor(Item):
-    def __init__(self):
-        super().__init__()
-        self._rating = None
-        self._weight_class = None
-        self._penalty = None
-
-
-class Shield(Item):
-    def __init__(self):
-        super().__init__()
-        self._weight_class = None
-        self._defense_modifier = None
-
-
-class State:
-    def __init__(self):
-        self._name = None
-        self._emburdened = None
-
-
-class Action:
-    def __init__(self):
-        self._name = None
-        self._type = None
-        self._cost = None
-        self._required_state = None
+    def bonus(self):
+        if self.level == 0:
+            return 0
+        elif self.level == 1:
+            return 2
+        elif self.level == 2:
+            return 3
+        else:
+            print("Focus level is too damn high")
+            raise Exception
 
 
 
-class MajorAction(Action):
-    def __init__(self):
-        super().__init__()
-        self._
