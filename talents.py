@@ -16,7 +16,7 @@ class Talents:
         current state"""
         pass
 
-    def aquire_talent(self, talent:Talent):
+    def aquire_talent(self, talent):
         """aquire the given talent, or add a level to it"""
         if talent in self.available_talents():
             """The talent is available, now do we already have it?"""
@@ -24,7 +24,7 @@ class Talents:
         else:
             self.aquired_talents.add(talent(self))
     
-    def return_talent(self, talent:Talent):
+    def return_talent(self, talent):
         """Return a talent formthe aquired_talents group"""
         talent_list = [
             individual_talent for individual_talent in self.available_talents 

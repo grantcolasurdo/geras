@@ -40,7 +40,7 @@ class BaseSpell:
         if arcana_name in self.arcana.magic.focuses:
             focus = self.arcana.magic.character.focuses[arcana.arcana_name]
 
-class AirArcana(BaseArcana):
+class AirArcana(BaseSpell):
     def __init__(self, level):
         super().__init__("Air Arcana", level)
 
