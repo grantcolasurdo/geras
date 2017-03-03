@@ -2,6 +2,12 @@
 
 __author__ = "Grant Colasurdo"
 
+
+class Items:
+    def __init__(self, character):
+        self.character = character
+
+
 class Item:
     def __init__(self, name, weight, size, value):
         self.item_name: str = name

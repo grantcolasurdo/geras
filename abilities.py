@@ -1,7 +1,6 @@
 """This is where abilities will be defined"""
 
-import geras.die
-import geras.input_tools as input_tools
+import input_tools as input_tools
 
 __author__ = "Grant Colasurdo"
 
@@ -17,6 +16,7 @@ ABILITY_LIST = (
     "Willpower"
 )
 
+
 class Abilities:
 
     def __init__(
@@ -30,6 +30,7 @@ class Abilities:
         self._fighting = None
         self._intelligence = None
         self._perception = None
+        self._strength = None
         self._willpower = None
         self.ability_map = {
             "Accuracy": self._accuracy,
@@ -39,6 +40,7 @@ class Abilities:
             "Fighting": self._fighting,
             "Intelligence": self._intelligence,
             "Perception": self._perception,
+            "Strength": self._strength,
             "Willpower": self._willpower
         }
         if initial_abilities is None:
@@ -53,8 +55,8 @@ class Abilities:
             )
 
     determine_ability_table = {
-        3:-2, 4:-1, 5:-1, 6:0, 7:0, 8:0, 9:1, 10:1, 11:1, 12:2, 13:2,
-        14:2, 15:3, 16:3, 17:3, 18:4
+        3: -2, 4: -1, 5: -1, 6: 0, 7: 0, 8: 0, 9: 1, 10: 1, 11: 1, 12: 2, 13: 2,
+        14: 2, 15: 3, 16: 3, 17: 3, 18: 4
     }
 
     def init_abilities(self):
@@ -64,65 +66,63 @@ class Abilities:
                 ability, 
                 self.determine_ability_table[
                     int(
-                        input_tools.InputResponse(
+                        input_tools.input_response(
                             "Roll for " + ability,
-                            [str(x) for x in range(3,19)]
+                            [str(x) for x in range(3, 19)]
                         )
                     )
                 ]
             )
             print(ability + " " + str(self.ability_map[ability].value))
 
-        if input_tools.InputResponse(
+        if input_tools.input_response(
             "Do you want to switch the values for two abilities? ", ["yes", "no"]
         ) == "yes":
             pass
-        print(self._accuracy)
-        print(self._communication)
-        print(self._constitution)
-        print(self._dexterity)
-        print(self._fighting)
-        print(self._intelligence)
-        print(self._strength)
-        print(self._willpower)
-
-
+        print(self.accuracy)
+        print(self.communication)
+        print(self.constitution)
+        print(self.dexterity)
+        print(self.fighting)
+        print(self.intelligence)
+        print(self.strength)
+        print(self.willpower)
 
     @property
     def accuracy(self):
-        return self._accuracy.value
+        return self.ability_map["Accuracy"]
 
     @property
     def communication(self):
-        return self._communication.value
+        return self.ability_map["Communication"]
 
     @property
     def constitution(self):
-        return self._constitution.value
+        return self.ability_map["Constitution"]
 
     @property
     def dexterity(self):
-        return self._dexterity.value
+        return self.ability_map["Dexterity"]
 
     @property
     def fighting(self):
-        return self._fighting.value
+        return self.ability_map["Fighting"]
 
     @property
     def intelligence(self):
-        return self._intelligence.value
+        return self.ability_map["Intelligence"]
 
     @property
     def perception(self):
-        return self._perception.value
+        return self.ability_map["Perception"]
 
     @property
     def strength(self):
-        return self._strength.value
+        return self.ability_map["Strength"]
 
     @property
     def willpower(self):
-        return self._willpower.value
+        return self.ability_map["Willpower"]
 
 
 class Ability:
@@ -132,22 +132,21 @@ class Ability:
     ):
         self.abilities = abilities
         self.ability_name = ability_name
-        self.ability_log = [(0,0,"Initialization")]
+        self.ability_log = [(0, 0, "Initialization")]
         while self.value > starting_value:
-            self.perminent_subtract("Initialization")
+            self.permanent_subtract("Initialization")
 
         while self.value < starting_value:
-            self.perminent_add("Initialization")
+            self.permanent_add("Initialization")
 
-
-    def perminent_add(self, source):
+    def permanent_add(self, source):
         self.ability_log.append((
             1,
             self.abilities.character.level,
             source
         ))
 
-    def perminent_subtract(self,source):
+    def permanent_subtract(self, source):
         self.ability_log.append((
             -1,
             self.abilities.character.level,

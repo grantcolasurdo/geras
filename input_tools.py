@@ -2,12 +2,15 @@
 
 __author__ = "Grant Colasurdo"
 
-def InputResponse(caption, options):
+
+def input_response(caption, options=None):
     print(caption)
-    print(' '.join(options))
+    if options is not None:
+        print(' '.join(options))
     choice = input('')
-    while choice not in options:
-        choice = input('Try again ')
+    if options is not None:
+        while choice not in options:
+            choice = input('Try again ')
     return choice
 
 

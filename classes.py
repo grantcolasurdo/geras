@@ -1,8 +1,9 @@
 """Character class information"""
 
+import input_tools as input_tools
+
 __author__ = "Grant Colasurdo"
 
-import geras.input_tools as input_tools
 
 class CharacterClass:
     """The base character class"""
@@ -21,22 +22,22 @@ class CharacterClass:
         self.base_health = 0
 
     def calculate_starting_health(self):
-        die_roll = input_tools.InputResponse(
+        die_roll = int(input_tools.input_response(
             "Roll 1d6 for your starting health calculation",
-            [str(x) for x in range(1,7)]
-        )
-        constitution = self.character.abilities.constitution
+            [str(x) for x in range(1, 7)]
+        ))
+        constitution = self.character.abilities.constitution.value
         starting_health = die_roll + constitution + self.base_health
-        print("Your character now has " + starting_health + " health")
+        print("Your character now has " + str(starting_health) + " health")
         return die_roll + constitution + self.base_health
 
     def init_class(self):
         self.character.max_health = self.calculate_starting_health()
 
+
 class Warrior(CharacterClass):
     def __init__(self, character):
         super().__init__(
-            self,
             character,
             "Warrior",
             {
@@ -46,20 +47,19 @@ class Warrior(CharacterClass):
                 "Dexterity"
             },
             {
-                "Accuracy"
-                ,"Communication"
-                ,"Intelligence"
-                ,"Percption"
-                ,"Willpower"
+                "Accuracy",
+                "Communication",
+                "Intelligence",
+                "Perception",
+                "Willpower"
             },
-            []
         )
         self.base_health = 30
+
 
 class Mage(CharacterClass):
     def __init__(self, character):
         super().__init__(
-            self,
             character,
             "Mage",
             {
@@ -69,20 +69,19 @@ class Mage(CharacterClass):
                 "Willpower"
             },
             {
-                "Communication",
+                 "Communication",
                  "Constitution",
                  "Dexterity",
                  "Fighting",
                  "Strength"
             },
-            []
         )
         self.base_health = 20
+
 
 class Rouge(CharacterClass):
     def __init__(self, character):
         super().__init__(
-            self,
             character,
             "Rouge",
             {
@@ -98,6 +97,5 @@ class Rouge(CharacterClass):
                 "Strength",
                 "Willpower"
             },
-            []
         )
         self.base_health = 25
