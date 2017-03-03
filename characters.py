@@ -12,7 +12,7 @@ import focuses
 import classes
 import races
 import abilities
-import input_tools as input_tools
+import input_tools
 
 __author__ = "Grant Colasurdo"
 

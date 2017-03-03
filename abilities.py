@@ -15,6 +15,24 @@ ABILITY_LIST = (
     "Strength",
     "Willpower"
 )
+DETERMINE_ABILITY_TABLE = {
+    3: -2,
+    4: -1,
+    5: -1,
+    6: 0,
+    7: 0,
+    8: 0,
+    9: 1,
+    10: 1,
+    11: 1,
+    12: 2,
+    13: 2,
+    14: 2,
+    15: 3,
+    16: 3,
+    17: 3,
+    18: 4
+}
 
 
 class Abilities:
@@ -54,17 +72,12 @@ class Abilities:
                 ability, initial_abilities[ability]
             )
 
-    determine_ability_table = {
-        3: -2, 4: -1, 5: -1, 6: 0, 7: 0, 8: 0, 9: 1, 10: 1, 11: 1, 12: 2, 13: 2,
-        14: 2, 15: 3, 16: 3, 17: 3, 18: 4
-    }
-
     def init_abilities(self):
         for ability in ABILITY_LIST:
             self.ability_map[ability] = Ability(
                 self,
                 ability, 
-                self.determine_ability_table[
+                DETERMINE_ABILITY_TABLE[
                     int(
                         input_tools.input_response(
                             "Roll for " + ability,
@@ -76,8 +89,11 @@ class Abilities:
             print(ability + " " + str(self.ability_map[ability].value))
 
         if input_tools.input_response(
-            "Do you want to switch the values for two abilities? ", ["yes", "no"]
+            "Do you want to switch the values for two abilities? ",
+            ["yes", "no"]
         ) == "yes":
+            pass
+        else:
             pass
         print(self.accuracy)
         print(self.communication)

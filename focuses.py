@@ -1,6 +1,11 @@
 """This is where the logic for focuses lie"""
 
+import character
+
 __author__ = "Grant Colasurdo"
+
+def aquire_focus(character: character.Character, focus_name: Focus):
+    character.focuses.aquire_focus(focus_name)
 
 
 class Focuses:

@@ -1,5 +1,8 @@
 """Traits of races"""
 
+import abilities
+import focuses
+
 __author__ = "Grant Colasurdo"
 
 
@@ -33,6 +36,43 @@ class Dwarf(Race):
             name="Dwarf",
             description="Short harry people",
             min_height=4,
-            max_height=5
+            max_height=5,
+            given_stats = [],
+            female_names = {
+                "Ailine", "Dara", "Kalin", "Klara", "Mora", 
+                "Telka", "Ulma"
+            },
+            male_names = {
+                "Bodag", "Crag", "Doffin", "Hador", "Gurt", "Throrik",
+                "Warrik"
+            },
+            family_names = {
+                "Bronzeblade", "Highcliff", "Ironshield", "Rockhammer",
+                "Steelhelm", "Stonebones"
+            },
+            benefit_schedule = {
+                2: (abilities.level_up, "Willpower"),
+                3: (focuses.aquire_focus, "Historacal Lore"),
+                4: (focuses.aquire_focus, "Historacal Lore"),
+                5: (focuses.aquire_focus, "Stamina"),
+                6: (weapon_groups.learn_group, "Axes"),
+                7: (abilities.level_up, "Fighting"),
+                8: (abilities.level_up, "Fighting"),
+                9: (focuses.aquire_focus, "Smithing"),
+                10: (focuses.aquire_focus, "Engineering"),
+                11: (focuses.aquire_focus, "Engineering"),
+                12: (abilities.level_up, "Strength")
+            }
+
+        )
+
+class Elf(Race):
+    def __init__(self):
+        super().__init__(
+            character = character,
+            name = "Elf",
+            description="Dirt worshiper",
+            min_height = 5,
+            max_height = 6,
         )
 
