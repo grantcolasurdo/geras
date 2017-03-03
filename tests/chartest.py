@@ -9,3 +9,4 @@ a = geras.characters.Character()
 print('character created')
 a.init_new_character()
 print('characer initialized')
+
