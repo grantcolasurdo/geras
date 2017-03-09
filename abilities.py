@@ -1,6 +1,6 @@
 """This is where abilities will be defined"""
 
-import input_tools as input_tools
+import input_tools
 
 __author__ = "Grant Colasurdo"
 
@@ -15,6 +15,7 @@ ABILITY_LIST = (
     "Strength",
     "Willpower"
 )
+
 DETERMINE_ABILITY_TABLE = {
     3: -2,
     4: -1,
@@ -34,6 +35,8 @@ DETERMINE_ABILITY_TABLE = {
     18: 4
 }
 
+def level_up(character, ablity_string, source):
+    character.Abilities.level_up(ability_name, source)
 
 class Abilities:
 
@@ -64,7 +67,7 @@ class Abilities:
         if initial_abilities is None:
             initial_abilities = {}
             for ability in ABILITY_LIST:
-                initial_abilities[ability] = 0 
+                initial_abilities[ability] = 0
 
         for ability in ABILITY_LIST:
             self.ability_map[ability] = Ability(
@@ -72,11 +75,20 @@ class Abilities:
                 ability, initial_abilities[ability]
             )
 
+    def level_up(self, ability_name, source):
+        try:
+            self.ability_map[ability_map].permanent_add(source)
+        except SetException:
+            print(
+                "A bad string value was sent to an Abilities object (" +
+                ability_name + ")"
+            )
+
     def init_abilities(self):
         for ability in ABILITY_LIST:
             self.ability_map[ability] = Ability(
                 self,
-                ability, 
+                ability,
                 DETERMINE_ABILITY_TABLE[
                     int(
                         input_tools.input_response(
@@ -92,7 +104,25 @@ class Abilities:
             "Do you want to switch the values for two abilities? ",
             ["yes", "no"]
         ) == "yes":
-            pass
+            ability_pool = ABILITY_LIST.copy()
+            print("Chose first skill")
+            for ability in ability_pool:
+                print(ability)
+            first_ability = ability_pool.pop(
+                input_tools.input_response(
+                    "Pick an ability",
+                    ability_pool
+                )
+            )
+            second_ability = ability_pool.pop(
+                input_tools.input_response(
+                    "Pick a second ability",
+                    ability_pool
+                )
+            )
+
+            
+
         else:
             pass
         print(self.accuracy)
