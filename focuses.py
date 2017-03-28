@@ -1,6 +1,11 @@
 """This is where the logic for focuses lie"""
 
+import character
+
 __author__ = "Grant Colasurdo"
+
+def aquire_focus(character: character.Character, focus_name: Focus):
+    character.focuses.aquire_focus(focus_name)
 
 
 class Focuses:
@@ -16,20 +21,23 @@ class Focuses:
         current state"""
         pass
 
+    def focus_exits(self, focus_name):
+        return any( focus.name == focus_name for focus in self.aquired_focuses)
+    
     def aquire_focus(self, focus):
         if focus in self.available_focuses():
             """The focus is available, now do we already have it?"""
-            return_focus(focus).level += 1
+            get_focus(focus).level += 1
         else:
             self.aquired_focuses.add(focus(self))
 
-    def return_focus(self, focus):
+    def get_focus(self, focus):
         focus_list = [
             individual_focus for individual_focus in self.available_focuses
             if isinstance(individual_focus, focus)
         ]
         if len(focus_list) == 1:
-            return return_focus[0]
+            return get_focus[0]
         else:
             return None
 

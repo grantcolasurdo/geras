@@ -12,7 +12,7 @@ import focuses
 import classes
 import races
 import abilities
-import input_tools as input_tools
+import input_tools
 
 __author__ = "Grant Colasurdo"
 
@@ -36,6 +36,7 @@ class Character:
         self.abilities: abilities.Abilities = None
         self.focuses: focuses.Focuses = None
         self.talents: talents.Talents = None
+        self.languages: languages.Languages = None
         self.weapon_groups: set = None
         self.talents: set = None
         self.character_class: classes.CharacterClass = None
@@ -80,6 +81,7 @@ class Character:
         self.abilities.init_abilities()
 
     def _choose_race(self):
+        self.languages = languages.Languages(self)
         self.race = races.Race(self)
         self.race.init_race()
 
@@ -97,8 +99,12 @@ class Character:
         pass
 
     def _pick_name(self):
-        self.first_name = input_tools.input_response("What is your character's first name?")
-        self.last_name = input_tools.input_response("What is your character's last name?")
+        self.first_name = input_tools.input_response(
+            "What is your character's first name?"
+        )
+        self.last_name = input_tools.input_response(
+            "What is your character's last name?"
+        )
         print("Hello, " + " ".join((self.first_name, self.last_name)))
 
     def _choose_goals_and_ties(self):
