@@ -13,6 +13,7 @@ import classes
 import races
 import abilities
 import input_tools
+import languages
 
 __author__ = "Grant Colasurdo"
 

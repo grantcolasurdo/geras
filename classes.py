@@ -15,11 +15,11 @@ class CharacterClass:
         secondary_abilities=None,
     ):
         self.character = character
-        self.class_name = name
-        self.primary_abilities = primary_abilities
-        self.secondary_abilities = secondary_abilities
+        self.class_name: str = name
+        self.primary_abilities: set = primary_abilities
+        self.secondary_abilities: set = secondary_abilities
         self.level_bonuses = None
-        self.base_health = 0
+        self.base_health: int = 0
 
     def calculate_starting_health(self):
         die_roll = int(input_tools.input_response(

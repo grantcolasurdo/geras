@@ -1,12 +1,11 @@
 #! /usr/bin/python
 import sys
-sys.path.append("~/home/grant/Projects/")
 import characters
+sys.path.append("~/home/grant/Projects/")
 
 print('geras imported')
 
 a = characters.Character()
 print('character created')
 a.init_new_character()
-print('characer initialized')
-
+print('character initialized')

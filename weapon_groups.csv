@@ -1,0 +1,13 @@
+name,success_ability,damage_ability
+Axes,Fighting,Strength
+Black Powder,Accuracy,Perception
+Bludgeons,Fighting,Strength
+Bows,Accuracy,Perception
+Brawling,Accuracy,Strength
+Dueling,Accuracy,Strength
+Heavy Blades,Fighting,Strength
+Lances,Fighting,Strength
+Light Blades,Accuracy,Strength
+Polearms,Fighting,Strength
+Spears,Fighting,Strength
+Staves,Accuracy,Strength

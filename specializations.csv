@@ -1,0 +1,13 @@
+specialization_name,talent_description,mage_available,rouge_available,warrior_available,novice_description,journeyman_description,master_description
+Arcane Scholar,You have made a study of arcane lore and magic items.,TRUE,FALSE,FALSE,,,
+Assassin,You know how to kill quickly and efficiently.,FALSE,TRUE,FALSE,,,
+Berserker,You use your rage as a weapon.,FALSE,FALSE,TRUE,,,
+Duelist,You are a master of speed and precision on the battlefield.,FALSE,TRUE,FALSE,,,
+Elementalist,"You have a talent for elemental magic. Choose one of the following magic talents to be your favored arcana: Air Arcana, Earth Arcana, Fire Arcana, or Water Arcana.",TRUE,FALSE,FALSE,,,
+Guardian,You know how to protect others.,FALSE,FALSE,TRUE,,,
+Knight,You are the elite of mounted warriors.,FALSE,FALSE,TRUE,,,
+Mage Hunter,You suffer no arcane evil to live.,FALSE,FALSE,TRUE,,,
+Miracle Worker,You have a naturally affinity for healing magic.,TRUE,FALSE,FALSE,,,
+Sharpshooter,You are an expert shot.,FALSE,TRUE,FALSE,,,
+Swashbuckler,You know how to fight with panache.,FALSE,TRUE,FALSE,,,
+Sword Mage,You meld the arts of magic and swordsmanship.,TRUE,FALSE,FALSE,,,

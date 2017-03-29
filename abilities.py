@@ -5,38 +5,23 @@ import input_tools
 __author__ = "Grant Colasurdo"
 
 ABILITY_LIST = (
-    'Accuracy',
-    "Communication",
-    "Constitution",
-    "Dexterity",
-    "Fighting",
-    "Intelligence",
-    "Perception",
-    "Strength",
-    "Willpower"
+    'Accuracy', "Communication", "Constitution", "Dexterity",
+    "Fighting", "Intelligence", "Perception", "Strength", "Willpower"
 )
 
 DETERMINE_ABILITY_TABLE = {
-    3: -2,
-    4: -1,
-    5: -1,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 1,
-    10: 1,
-    11: 1,
-    12: 2,
-    13: 2,
-    14: 2,
-    15: 3,
-    16: 3,
-    17: 3,
-    18: 4
+    3: -2, 4: -1, 5: -1, 6: 0, 7: 0, 8: 0, 9: 1, 10: 1,
+    11: 1, 12: 2, 13: 2, 14: 2, 15: 3, 16: 3, 17: 3, 18: 4
 }
 
-def level_up(character, ablity_string, source):
+
+def level_up(character, ability_name, source):
     character.Abilities.level_up(ability_name, source)
+
+
+def ability_greater_than(character, ability_name, compared_to):
+    return character.abilities.ability_map[ability_name] > compared_to
+
 
 class Abilities:
 
@@ -77,8 +62,9 @@ class Abilities:
 
     def level_up(self, ability_name, source):
         try:
-            self.ability_map[ability_map].permanent_add(source)
-        except SetException:
+            assert ability_name in self.ability_map
+            self.ability_map[ability_name].permanent_add(source)
+        except AssertionError:
             print(
                 "A bad string value was sent to an Abilities object (" +
                 ability_name + ")"
@@ -104,70 +90,79 @@ class Abilities:
             "Do you want to switch the values for two abilities? ",
             ["yes", "no"]
         ) == "yes":
-            ability_pool = ABILITY_LIST.copy()
+            ability_pool = {ability for ability in ABILITY_LIST}
             print("Chose first skill")
             for ability in ability_pool:
                 print(ability)
-            first_ability = ability_pool.pop(
-                input_tools.input_response(
+            first_ability = input_tools.input_response(
                     "Pick an ability",
                     ability_pool
-                )
-            )
-            second_ability = ability_pool.pop(
-                input_tools.input_response(
-                    "Pick a second ability",
-                    ability_pool
-                )
             )
 
-            
+            second_value = self.ability_map[first_ability].value
+            ability_pool.remove(first_ability)
+            second_ability = input_tools.input_response(
+                    "Pick a second ability",
+                    ability_pool
+            )
+
+            first_value = self.ability_map[second_ability].value
+            self.ability_map[first_ability].value = first_value
+            self.ability_map[second_ability].value = second_value
 
         else:
             pass
         print(self.accuracy)
+        print(self.accuracy.value)
         print(self.communication)
+        print(self.communication.value)
         print(self.constitution)
+        print(self.constitution.value)
         print(self.dexterity)
+        print(self.dexterity.value)
         print(self.fighting)
+        print(self.fighting.value)
         print(self.intelligence)
+        print(self.intelligence.value)
         print(self.strength)
+        print(self.strength.value)
         print(self.willpower)
+        print(self.willpower.value)
 
     @property
-    def accuracy(self):
+    def accuracy(self) -> Ability:
         return self.ability_map["Accuracy"]
 
     @property
-    def communication(self):
+    def communication(self) -> Ability:
         return self.ability_map["Communication"]
 
     @property
-    def constitution(self):
+    def constitution(self) -> Ability:
         return self.ability_map["Constitution"]
 
     @property
-    def dexterity(self):
+    def dexterity(self) -> Ability:
         return self.ability_map["Dexterity"]
 
     @property
-    def fighting(self):
+    def fighting(self) -> Ability:
         return self.ability_map["Fighting"]
 
     @property
-    def intelligence(self):
+    def intelligence(self) -> Ability:
         return self.ability_map["Intelligence"]
 
     @property
-    def perception(self):
+    def perception(self) -> Ability:
         return self.ability_map["Perception"]
 
     @property
-    def strength(self):
+    def strength(self) -> Ability:
         return self.ability_map["Strength"]
 
     @property
-    def willpower(self):
+    def willpower(self) -> Ability:
         return self.ability_map["Willpower"]
 
 
@@ -202,5 +197,3 @@ class Ability:
     @property
     def value(self):
         return sum(entry[0] for entry in self.ability_log) 
-    
-

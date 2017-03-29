@@ -3,7 +3,7 @@
 __author__ = "Grant Colasurdo"
 
 
-def input_response(caption, options=None):
+def input_response(caption, options=None) -> str:
     print(caption)
     if options is not None:
         print(' '.join(options))
@@ -12,6 +12,3 @@ def input_response(caption, options=None):
         while choice not in options:
             choice = input('Try again ')
     return choice
-
-
-
