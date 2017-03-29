@@ -18,6 +18,7 @@ def find_row_by_name(value: str) -> dict:
 
 
 class Talents:
+    """The container for aquired talents and manager of talent meta info"""
     def __init__(
         self, character=None, acquired=set()
     ):
@@ -25,18 +26,38 @@ class Talents:
         self.acquired_talents: set = acquired
 
     @property
-    def available_talents(self):
+    def available_talents(self) -> set:
         """Return a set of talents that are available to a character in it's
         current state"""
         pass
+
+    def list_available_descriptions(self):
+        level_index_map = {
+            0: 'novice_description',
+            1: 'journeyman_description',
+            2: 'master_description'
+        }
+        available_pool = self.available_talents
+        unlearned_pool = available_pool - self.acquired_talents
+        known_pool = available_pool - unlearned_pool
+        print("These are the talents not yet known")
+        [print(talent.novice_description) for talent in unlearned_pool]
+        print("These are the talents that are upgradeable")
+        [
+            print(talent.__dict__[level_index_map(talent.level)]) 
+            for talent in known_pool
+        ]
+
 
     def acquire_talent(self, talent):
         """acquire the given talent, or add a level to it"""
         if talent in self.available_talents:
             """The talent is available, now do we already have it?"""
+            if talent not in self.acquired_talents:
+                self.acquired_talents.add(talent(self))
             self.return_talent(talent).level += 1
         else:
-            self.acquired_talents.add(talent(self))
+            print("That talent is not available for this character")
     
     def return_talent(self, talent: str) -> Talent:
         """Return a talent form the acquired_talents group"""
@@ -169,7 +190,7 @@ class Carousing(Talent):
 
 
 class Chirurgy(Talent):
-    """You are experienced with bows and crossbows"""
+    """You can treat wounds and illnesses."""
     def __init__(self, talents, level=None):
         super(Chirurgy, self).__init__(
             talents,
@@ -184,7 +205,7 @@ class Chirurgy(Talent):
 
 
 class Command(Talent):
-    """You are experienced with bows and crossbows"""
+    """You are a natural leader"""
     def __init__(self, talents, level=None):
         super(Command, self).__init__(
             talents,
@@ -498,3 +519,13 @@ class WeaponAndShieldStyle(Talent):
         other_requirements = character.abilities.strength >= 2
         return class_met and other_requirements
 
+"""
+Here we initialize the "ALL TALENTS" global variable
+"""
+
+ALL_TALENTS = {Alchemy, AnimalTraining, ArmorTraining, ArcheryStyle, Carousing,
+               Chirurgy, Command, Contacts, DualWeaponStyle, Horsemanship,
+               Intrigue, Linguistics, Lore, MountedCombatStyle, Music,
+               Observation, Oratory, PoleWeaponStyle, QuickReflexes, Scouting,
+               SingleWeaponStyle, Thievery, ThrownWeaponStyle, TwoHandedStyle,
+               UnarmedStyle, WeaponAndShieldStyle}
