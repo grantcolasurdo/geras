@@ -7,6 +7,40 @@ __author__ = "Grant Colasurdo"
 
 ALL_FOCUSES = set()
 
+class Focus:
+    def __init__(
+        self,
+        focuses=None,
+        name=None,
+        ability=None,
+        level=None,
+        description=None
+    ):
+        self.focuses = focuses
+        self.focus_name: str = name
+        self.ability: str = ability
+        self.level = level
+        self.description: str = description
+
+    def bonus(self):
+        if self.level == 0:
+            return 0
+        elif self.level == 1:
+            return 2
+        elif self.level == 2:
+            return 3
+        else:
+            print("Focus level is too damn high")
+            raise Exception
+
+    def improve_focus(self):
+        if self.focuses.character.level > 10 and self.level < 2:
+            self.level += 1
+        elif self.level > 1:
+            print("Focus is already improved")
+        else:
+            print("Character is too low a level to improve the focus")
+
 
 class Focuses:
     def __init__(
@@ -101,39 +135,6 @@ class Focuses:
             for test_focus in self.acquired_focuses
         )
 
-class Focus:
-    def __init__(
-        self,
-        focuses=None,
-        name=None,
-        ability=None,
-        level=None,
-        description=None
-    ):
-        self.focuses = focuses
-        self.focus_name: str = name
-        self.ability: str = ability
-        self.level = level
-        self.description: str = description
-
-    def bonus(self):
-        if self.level == 0:
-            return 0
-        elif self.level == 1:
-            return 2
-        elif self.level == 2:
-            return 3
-        else:
-            print("Focus level is too damn high")
-            raise Exception
-
-    def improve_focus(self):
-        if self.focuses.character.level > 10 and self.level < 2:
-            self.level += 1
-        elif self.level > 1:
-            print("Focus is already improved")
-        else:
-            print("Character is too low a level to improve the focus")
 
 
 def acquire_focus(character, focus_name: str):

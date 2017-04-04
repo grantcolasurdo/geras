@@ -23,6 +23,39 @@ def ability_greater_than(character, ability_name, compared_to):
     return character.abilities.ability_map[ability_name] > compared_to
 
 
+class Ability:
+    """Base class for an individual Ability"""
+    def __init__(
+        self, abilities=None, ability_name=None, starting_value=0
+    ):
+        self.abilities = abilities
+        self.ability_name = ability_name
+        self.ability_log = [(0, 0, "Initialization")]
+        while self.value > starting_value:
+            self.permanent_subtract("Initialization")
+
+        while self.value < starting_value:
+            self.permanent_add("Initialization")
+
+    def permanent_add(self, source):
+        self.ability_log.append((
+            1,
+            self.abilities.character.level,
+            source
+        ))
+
+    def permanent_subtract(self, source):
+        self.ability_log.append((
+            -1,
+            self.abilities.character.level,
+            source
+        ))
+
+    @property
+    def value(self):
+        return sum(entry[0] for entry in self.ability_log)
+
+
 class Abilities:
 
     def __init__(
@@ -166,34 +199,3 @@ class Abilities:
         return self.ability_map["Willpower"]
 
 
-class Ability:
-    """Base class for an individual Ability"""
-    def __init__(
-        self, abilities=None, ability_name=None, starting_value=0
-    ):
-        self.abilities = abilities
-        self.ability_name = ability_name
-        self.ability_log = [(0, 0, "Initialization")]
-        while self.value > starting_value:
-            self.permanent_subtract("Initialization")
-
-        while self.value < starting_value:
-            self.permanent_add("Initialization")
-
-    def permanent_add(self, source):
-        self.ability_log.append((
-            1,
-            self.abilities.character.level,
-            source
-        ))
-
-    def permanent_subtract(self, source):
-        self.ability_log.append((
-            -1,
-            self.abilities.character.level,
-            source
-        ))
-
-    @property
-    def value(self):
-        return sum(entry[0] for entry in self.ability_log) 

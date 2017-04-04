@@ -18,7 +18,7 @@ class CharacterClass:
         self.class_name: str = name
         self.primary_abilities: set = primary_abilities
         self.secondary_abilities: set = secondary_abilities
-        self.level_bonuses = None
+        self.level_bonuses = {}
         self.base_health: int = 0
 
     def calculate_starting_health(self):
@@ -28,7 +28,7 @@ class CharacterClass:
         ))
         constitution = self.character.abilities.constitution.value
         starting_health = die_roll + constitution + self.base_health
-        print("Your character now has " + str(starting_health) + " health")
+        print("Your character now has a maximum health of " + str(starting_health))
         return die_roll + constitution + self.base_health
 
     def init_class(self):
@@ -55,6 +55,8 @@ class Warrior(CharacterClass):
             },
         )
         self.base_health = 30
+        self.level_bonuses ={
+        }
 
 
 class Mage(CharacterClass):
@@ -77,6 +79,8 @@ class Mage(CharacterClass):
             },
         )
         self.base_health = 20
+        self.level_bonuses = {
+        }
 
 
 class Rouge(CharacterClass):

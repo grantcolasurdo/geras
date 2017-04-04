@@ -17,6 +17,45 @@ def find_row_by_name(value: str) -> dict:
     print("Index not found")
 
 
+class Talent:
+    def __init__(
+        self,
+        talents=None,
+        name=None,
+        level=None,
+    ):
+        self.talent_name = name
+        db_details = find_row_by_name(self.talent_name)
+        self.talents = talents
+        self.class_requirements = set()
+        if db_details['mage_available']:
+            self.class_requirements.add(classes.Mage)
+        if db_details['rouge_available']:
+            self.class_requirements.add(classes.Rouge)
+        if db_details['warrior_available']:
+            self.class_requirements.add(classes.Warrior)
+        self.description = db_details['description']
+        self.novice_description = db_details['novice_description']
+        self.journeyman_description = db_details['journeyman_description']
+        self.master_description = db_details['master_description']
+        if level is None:
+            self.level = 0
+
+    def acquire(self, character):
+        already_acquired = any(
+            isinstance(talent, self.__class__) for talent in character.talents
+        )
+        eligible = already_acquired and character.character_class in self.class_requirements
+        eligible = eligible and self.is_eligible(character)
+        if eligible:
+            self.talents = character.talents
+            character.talents.acquired_talents.add(self)
+        else:
+            print("Character not eligible to acquire this talent")
+
+    def is_eligible(self, character) -> bool:
+        pass
+
 class Talents:
     """The container for aquired talents and manager of talent meta info"""
     def __init__(
@@ -70,45 +109,6 @@ class Talents:
         else:
             print("That talent is not acquired yet")
 
-
-class Talent:
-    def __init__(
-        self,
-        talents=None,
-        name=None,
-        level=None,
-    ):
-        self.talent_name = name
-        db_details = find_row_by_name(self.talent_name)
-        self.talents = talents
-        self.class_requirements = set()
-        if db_details['mage_available']:
-            self.class_requirements.add(classes.Mage)
-        if db_details['rouge_available']:
-            self.class_requirements.add(classes.Rouge)
-        if db_details['warrior_available']:
-            self.class_requirements.add(classes.Warrior)
-        self.description = db_details['description']
-        self.novice_description = db_details['novice_description']
-        self.journeyman_description = db_details['journeyman_description']
-        self.master_description = db_details['master_description']
-        if level is None:
-            self.level = 0
-
-    def acquire(self, character):
-        already_acquired = any(
-            isinstance(talent, self.__class__) for talent in character.talents
-        )
-        eligible = already_acquired and character.character_class in self.class_requirements
-        eligible = eligible and self.is_eligible(character)
-        if eligible:
-            self.talents = character.talents
-            character.talents.acquired_talents.add(self)
-        else:
-            print("Character not eligible to acquire this talent")
-
-    def is_eligible(self, character) -> bool:
-        pass
 
 
 class Alchemy(Talent):

@@ -33,7 +33,6 @@ class Race:
             function(self.character, arguments)
         self.roll_benefit()
 
-
     def roll_benefit(self):
         roll_1 = input_tools.input_response(
             "Roll 2d6 for your benefit",
@@ -50,7 +49,7 @@ class Race:
                 range(2, 13)
             )
             benefit_2 = self.benefit_schedule[roll_2]
-            roll_2_same =  benefit_2 == benefit_1
+            roll_2_same = benefit_2 == benefit_1
         function_2 = benefit_2[0]
         args_2 = benefit_2[1:]
         function_2(self.character, args_2)
