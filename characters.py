@@ -45,6 +45,7 @@ class Character:
         self.race: races.Race = None
         self.magic: spells.Magic = None
         self.items: items.Items = None
+        self.base_speed: int = None
 
     def rest(self):
         self.current_health = self.max_health
@@ -110,3 +111,11 @@ class Character:
 
     def _choose_goals_and_ties(self):
         pass
+
+
+def dark_sight(character: Character, value: bool):
+    character.dark_sight = value
+
+
+def base_speed(character: Character, value: int):
+    character.base_speed = value

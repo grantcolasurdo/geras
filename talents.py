@@ -56,6 +56,7 @@ class Talent:
     def is_eligible(self, character) -> bool:
         pass
 
+
 class Talents:
     """The container for aquired talents and manager of talent meta info"""
     def __init__(
@@ -108,7 +109,6 @@ class Talents:
             return talent_list.pop()
         else:
             print("That talent is not acquired yet")
-
 
 
 class Alchemy(Talent):

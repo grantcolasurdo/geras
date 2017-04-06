@@ -1,6 +1,7 @@
 """Traits of races"""
 
 import abilities
+import weapon_groups
 import focuses
 import languages
 import input_tools
@@ -10,16 +11,17 @@ __author__ = "Grant Colasurdo"
 
 class Race:
     def __init__(
-        self, character=None, name=None, description=None,
-        min_height=None, max_height=None, given_stats=None,
-        female_names=None, male_names=None, family_names=None,
-        benefit_schedule=None
+        self, character=None, name=None, description=None, min_height=None, max_height=None, base_speed=None,
+            dark_sight=None, given_stats=None, female_names=None, male_names=None, family_names=None,
+            benefit_schedule=None
     ):
         self.character = character
         self.race_name = name
         self.description = description
         self.min_height = min_height
         self.max_height = max_height
+        self.base_speed = base_speed
+        self.dark_sight = dark_sight
         self.given_stats = given_stats
         self.female_names = female_names
         self.male_names = male_names
@@ -40,9 +42,10 @@ class Race:
         )
         benefit_1 = self.benefit_schedule[roll_1]
         function_1 = benefit_1[0]
-        args_1 = benefit[1:]
+        args_1 = benefit_1[1:]
         function_1(self.character, args_1)
         roll_2_same = True
+        benefit_2 = []
         while roll_2_same:
             roll_2 = input_tools.input_response(
                 "Roll another 2d6 for your other race benefit",
@@ -56,33 +59,34 @@ class Race:
 
 
 class Dwarf(Race):
-    def __init__(self):
+    def __init__(self, character):
         super().__init__(
             character=character,
             name="Dwarf",
             description="Short harry people",
             min_height=4,
             max_height=5,
-            given_stats = [
+            base_speed=8,
+            dark_sight=True,
+            given_stats=[
                 (abilities.level_up, ("Constitution", "Race")),
-                (focuses.acquire_focus, ("Evaluation or Drinking")),
-                (dark_sight, True),
-                (languages.add_language, "Dwarven"), 
+                (focuses.acquire_focus, ["Evaluation", "Drinking"]),
+                (languages.add_language, "Dwarven"),
                 (languages.add_language, "Common Tongue")
             ],
-            female_names = {
+            female_names={
                 "Ailine", "Dara", "Kalin", "Klara", "Mora",
                 "Telka", "Ulma"
             },
-            male_names = {
+            male_names={
                 "Bodag", "Crag", "Doffin", "Hador", "Gurt", "Throrik",
                 "Warrik"
             },
-            family_names = {
+            family_names={
                 "Bronzeblade", "Highcliff", "Ironshield", "Rockhammer",
                 "Steelhelm", "Stonebones"
             },
-            benefit_schedule = {
+            benefit_schedule={
                 2: (abilities.level_up, "Willpower"),
                 3: (focuses.acquire_focus, "Historacal Lore"),
                 4: (focuses.acquire_focus, "Historacal Lore"),
@@ -98,82 +102,72 @@ class Dwarf(Race):
 
         )
 
+
 class Elf(Race):
-    def __init__(self):
+    def __init__(self, character):
         super().__init__(
-            character = character,
-            name = "Elf",
+            character=character,
+            name="Elf",
             description="Dirt worshiper",
-            min_height = 5,
-            max_height = 6,
-            given_stats = [
-                (ability.level_up, "Dexterity"),
-                (
-                    focuses.choose_focus,
-                    (
-                        focuses.Focus("Natural Lore"),
-                        focuses.Focus("Seeing")
-                    )
-                )
-                (characer.dark_sight, True),
-                (character.base_speed, 12),
-                (languages.add_language, "Elven")
+            min_height=5,
+            max_height=6,
+            base_speed=12,
+            dark_sight=True,
+            given_stats=[
+                (abilities.level_up, "Dexterity"),
+                (focuses.choose_focus, ["Natural Lore", "Seeing"]),
+                (languages.add_language, "Elven"),
                 (languages.add_language, "Common Tongue")
             ],
-            benefit_schedule = {
+            benefit_schedule={
                 2: (abilities.level_up, "Communication"),
                 3: (focuses.acquire_focus, "Culteral Lore"),
                 4: (focuses.acquire_focus, "Culteral Lore"),
                 5: (focuses.acquire_focus, "Hearing"),
                 6: (weapon_groups.learn_group, "Bows"),
-                7: (abilities.level_up, "Acuuracy"),
-                8: (abilities.level_up, "Acuuracy"),
+                7: (abilities.level_up, "Accuracy"),
+                8: (abilities.level_up, "Accuracy"),
                 9: (focuses.acquire_focus, "Initiative"),
                 10: (focuses.acquire_focus, "Persuasion"),
                 11: (focuses.acquire_focus, "Persuasion"),
                 12: (abilities.level_up, "Perception"),
             },
-            female_names = {
+            female_names={
                 "Alowar", "Celemor", "Elowen", "Faerenel", "Hereal",
                 "Lanathiel"
             },
-            male_names = {
+            male_names={
                 "Alagolin", "Effolond", "Kyriel", "Larrendir", "Melloran",
                 "Serren"
             },
-            family_names = {
+            family_names={
                 "Andurad", "Arvanor", "Derendil", "Ellendi", "Kellovan",
                 "Talloran"
             }
         )
 
+
 class Gnome(Race):
-    def __init__(self):
+    def __init__(self, character):
         super().__init__(
-            character = character,
-            name = "Gnome",
+            character=character,
+            name="Gnome",
             description="The gimps",
-            min_height = 3,
-            max_height = 4,
-            given_stats = [
-                (ability.level_up, "Dexterity"),
-                (
-                    focuses.choose_focus,
-                    (
-                        focuses.Focus("Stamina"),
-                        focuses.Focus("Legerdemain")
-                    )
-                )
-                (characer.dark_sight, True),
-                (character.base_speed, 8),
-                (languages.add_language, "Gnomish")
+            min_height=3,
+            max_height=4,
+            base_speed=8,
+            dark_sight=True,
+            given_stats=[
+                (abilities.level_up, "Dexterity"),
+                (focuses.choose_focus, ["Stamina", "Legerdemain"]),
+                (languages.add_language, "Gnomish"),
                 (languages.add_language, "Common Tongue")
             ],
-            benefit_schedule = {
+            benefit_schedule={
                 2: (abilities.level_up, "Constitution"),
                 3: (focuses.acquire_focus, "Traps"),
                 4: (focuses.acquire_focus, "Traps"),
-                5: (focuses.acquire_focus, "Evaluatoin"),
+                5: (focuses.acquire_focus, "Evaluation"),
                 6: (focuses.acquire_focus, "Hearing"),
                 7: (abilities.level_up, "Willpower"),
                 8: (abilities.level_up, "Willpower"),
@@ -182,38 +176,32 @@ class Gnome(Race):
                 11: (focuses.acquire_focus, "Bargaining"),
                 12: (abilities.level_up, "Intelligence"),
             },
-            female_names = {
+            female_names={
             },
-            male_names = {
+            male_names={
             },
-            family_names = {
+            family_names={
             }
         )
 
 
 class Halfling(Race):
-    def __init__(self):
+    def __init__(self, character):
         super().__init__(
-            character = character,
-            name = "Halfling",
+            character=character,
+            name="Halfling",
             description="The super gimps",
-            min_height = 2,
-            max_height = 3,
-            given_stats = [
-                (ability.level_up, "Dexterity"),
-                (
-                    focuses.choose_focus,
-                    (
-                        focuses.Focus("Bargaining"),
-                        focuses.Focus("Stealth")
-                    )
-                )
-                (characer.dark_sight, False),
-                (character.base_speed, 8),
-                (languages.add_language, "Halfling")
+            min_height=2,
+            max_height=3,
+            base_speed=8,
+            dark_sight=False,
+            given_stats=[
+                (abilities.level_up, "Dexterity"),
+                (focuses.choose_focus, ["Bargaining", "Stealth"]),
+                (languages.add_language, "Halfling"),
                 (languages.add_language, "Common Tongue")
             ],
-            benefit_schedule = {
+            benefit_schedule={
                 2: (abilities.level_up, "Perception"),
                 3: (focuses.acquire_focus, "Persuasion"),
                 4: (focuses.acquire_focus, "Persuasion"),
@@ -226,36 +214,31 @@ class Halfling(Race):
                 11: (focuses.acquire_focus, "Climbing"),
                 12: (abilities.level_up, "Accuracy"),
             },
-            female_names = {
+            female_names={
             },
-            male_names = {
+            male_names={
             },
-            family_names = {
+            family_names={
             }
         )
 
+
 class Human(Race):
-    def __init__(self):
+    def __init__(self, character):
         super().__init__(
-            character = character,
-            name = "Human",
+            character=character,
+            name="Human",
             description="Master race",
-            min_height = 4,
-            max_height = 7,
-            given_stats = [
-                (ability.level_up, "Fighting"),
-                (
-                    focuses.choose_focus,
-                    (
-                        focuses.Focus("Riding"),
-                        focuses.Focus("Swimming")
-                    )
-                )
-                (characer.dark_sight, False),
-                (character.base_speed, 10)
+            min_height=4,
+            max_height=7,
+            base_speed=10,
+            dark_sight=False,
+            given_stats=[
+                (abilities.level_up, "Fighting"),
+                (focuses.choose_focus, ["Riding", "Swimming"]),
                 (languages.add_language, "Common Tongue")
             ],
-            benefit_schedule = {
+            benefit_schedule={
                 2: (abilities.level_up, "Intelligence"),
                 3: (focuses.acquire_focus, "Stamina"),
                 4: (focuses.acquire_focus, "Searching"),
@@ -268,13 +251,13 @@ class Human(Race):
                 11: (focuses.acquire_focus, "Brawling"),
                 12: (abilities.level_up, "Strength"),
             },
-            female_names = {
+            female_names={
                 "Catrin", "Iona", "Lyn", "Nikki", "Sienna", "Zara"
             },
-            male_names = {
+            male_names={
                 "Aarin", "Donal", "Jorm", "Kellan", "Marric", "Thom"
             },
-            family_names = {
+            family_names={
                 "Baker", "Cooper", "Smith", "Ward", "Highgate", "Lakeside",
                 "Silverton"
             }
@@ -282,28 +265,22 @@ class Human(Race):
 
 
 class Orc(Race):
-    def __init__(self):
+    def __init__(self, character):
         super().__init__(
-            character = character,
-            name = "Orc",
+            character=character,
+            name="Orc",
             description="Shitskin",
-            min_height = 5,
-            max_height = 7,
-            given_stats = [
-                (ability.level_up, "Strength"),
-                (
-                    focuses.choose_focus,
-                    (
-                        focuses.Focus("Stamina"),
-                        focuses.Focus("Might")
-                    )
-                )
-                (characer.dark_sight, True),
-                (character.base_speed, 10),
-                (languages.add_language, "Orcish")
+            min_height=5,
+            max_height=7,
+            base_speed=10,
+            dark_sight=True,
+            given_stats=[
+                (abilities.level_up, "Strength"),
+                (focuses.choose_focus, ["Stamina", "Might"]),
+                (languages.add_language, "Orcish"),
                 (languages.add_language, "Common Tongue")
             ],
-            benefit_schedule = {
+            benefit_schedule={
                 2: (abilities.level_up, "Constitution"),
                 3: (focuses.acquire_focus, "Smelling"),
                 4: (focuses.acquire_focus, "Smelling"),
@@ -316,40 +293,35 @@ class Orc(Race):
                 11: (focuses.acquire_focus, "Brawling"),
                 12: (abilities.level_up, "Willpower"),
             },
-            female_names = {
+            female_names={
                 "Beska", "Eldra", "Grisha", "Mag", "Oota", "Vol"
             },
-            male_names = {
+            male_names={
                 "Feld", "Gar", "Harsk", "Kurg", "Skag", "Tor"
             },
-            family_names = {
+            family_names={
                 "Blackfire", "Heartblood", "Irontusk", "Redaxe", "Sunder"
             }
         )
 
+
 class Saurian(Race):
-    def __init__(self):
+    def __init__(self, character):
         super().__init__(
-            character = character,
-            name = "Saurian",
+            character=character,
+            name="Saurian",
             description="Polititian",
-            min_height = 5,
-            max_height = 7,
-            given_stats = [
-                (ability.level_up, "Strength"),
-                (
-                    focuses.choose_focus,
-                    (
-                        focuses.Focus("Scientific Lore"),
-                        focuses.Focus("Self-Discipline")
-                    )
-                )
-                (characer.dark_sight, False),
-                (character.base_speed, 10),
-                (languages.add_language, "Saurian")
+            min_height=5,
+            max_height=7,
+            base_speed=10,
+            dark_sight=False,
+            given_stats=[
+                (abilities.level_up, "Strength"),
+                (focuses.choose_focus, ["Scientific Lore", "Self-Discipline"]),
+                (languages.add_language, "Saurian"),
                 (languages.add_language, "Common Tongue")
             ],
-            benefit_schedule = {
+            benefit_schedule={
                 2: (abilities.level_up, "Willpower"),
                 3: (focuses.acquire_focus, "Stamina"),
                 4: (focuses.acquire_focus, "Stamina"),
@@ -362,10 +334,10 @@ class Saurian(Race):
                 11: (focuses.acquire_focus, "Intimidation"),
                 12: (abilities.level_up, "Constitution"),
             },
-            female_names = {
+            female_names={
             },
-            male_names = {
+            male_names={
             },
-            family_names = {
+            family_names={
             }
         )
