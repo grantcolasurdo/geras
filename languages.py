@@ -27,7 +27,7 @@ class Language:
     """
     def __init__(
         self,
-        languages: Languages,
+        languages,
         language_name: str,
         level: int = 0
     ):
