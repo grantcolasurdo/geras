@@ -145,57 +145,41 @@ class Abilities:
 
         else:
             pass
-        print(self.accuracy)
-        print(self.accuracy.value)
-        print(self.communication)
-        print(self.communication.value)
-        print(self.constitution)
-        print(self.constitution.value)
-        print(self.dexterity)
-        print(self.dexterity.value)
-        print(self.fighting)
-        print(self.fighting.value)
-        print(self.intelligence)
-        print(self.intelligence.value)
-        print(self.strength)
-        print(self.strength.value)
-        print(self.willpower)
-        print(self.willpower.value)
 
     @property
     def accuracy(self) -> Ability:
-        return self.ability_map["Accuracy"]
+        return self.ability_map["Accuracy"].value
 
     @property
     def communication(self) -> Ability:
-        return self.ability_map["Communication"]
+        return self.ability_map["Communication"].value
 
     @property
     def constitution(self) -> Ability:
-        return self.ability_map["Constitution"]
+        return self.ability_map["Constitution"].value
 
     @property
     def dexterity(self) -> Ability:
-        return self.ability_map["Dexterity"]
+        return self.ability_map["Dexterity"].value
 
     @property
     def fighting(self) -> Ability:
-        return self.ability_map["Fighting"]
+        return self.ability_map["Fighting"].value
 
     @property
     def intelligence(self) -> Ability:
-        return self.ability_map["Intelligence"]
+        return self.ability_map["Intelligence"].value
 
     @property
     def perception(self) -> Ability:
-        return self.ability_map["Perception"]
+        return self.ability_map["Perception"].value
 
     @property
     def strength(self) -> Ability:
-        return self.ability_map["Strength"]
+        return self.ability_map["Strength"].value
 
     @property
     def willpower(self) -> Ability:
-        return self.ability_map["Willpower"]
+        return self.ability_map["Willpower"].value
 
 

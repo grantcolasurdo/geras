@@ -9,6 +9,7 @@ import input_tools
 __author__ = "Grant Colasurdo"
 
 
+
 class Race:
     def __init__(
         self, character=None, name=None, description=None, min_height=None, max_height=None, base_speed=None,
@@ -341,3 +342,20 @@ class Saurian(Race):
             family_names={
             }
         )
+
+RACE_DICT = {
+    "Dwarf": Dwarf,
+    "ElF": Elf,
+    "Gnome": Gnome,
+    "Halfling": Halfling,
+    "Human": Human,
+    "Orc": Orc,
+    "Saurian": Saurian
+}
+
+
+def init_race() -> Race:
+    possible_races = {key for key in RACE_DICT}
+    selected_race = input_tools.input_response("Choose your race", possible_races)
+    character_race = RACE_DICT[selected_race]
+    return character_race

@@ -103,3 +103,18 @@ class Rouge(CharacterClass):
             },
         )
         self.base_health = 25
+
+
+CLASS_DICT = {
+    "Warrior": Warrior,
+    "Mage": Mage,
+    "Rouge": Rouge
+}
+
+
+def init_class():
+    chosen_class = input_tools.input_response(
+        "Choose your Character Class",
+        {"Warrior", "Mage", "Rouge"}
+    )
+    return CLASS_DICT[chosen_class]

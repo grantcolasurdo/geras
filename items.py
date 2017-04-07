@@ -1,9 +1,12 @@
 """This is a repository for items in AGE"""
 
+import csv
+
 __author__ = "Grant Colasurdo"
 
 
 class Items:
+    """This class manages the meta-info of """
     def __init__(self, character):
         self.character = character
 
@@ -26,6 +29,44 @@ class Item:
 class Currency(Item):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+
+class Equipment:
+    """This will manage the meta level information for the items worn by a character"""
+    def __init__(self):
+        self.all_items = set()
+        self.primary_hand = None
+        self.secondary_hand = None
+        self._armor = None
+        self._backpack = None
+    
+    @property
+    def armor_value(self) -> int:
+        """The amount of protection your armor affords you"""
+        return 
+    
+    @property
+    def armor_penalty(self) -> int:
+        """The penalty applied to speed and Dexterity if untrained in the armor class"""
+        return 
+    
+    @property
+    def armor_strain(self):
+        """The penalty applied to magic rolls"""
+        return
+
+    @property
+    def armor(self) -> Armor:
+        return
+
+    @armor.setter
+    def armor(self, value):
+        pass
+
+    @property
+    def shield_bonus(self):
+        """Return the bonus to defense gained from having a shield"""
+        return
 
 
 class Container(Item):
@@ -103,6 +144,7 @@ class Armor(Item):
         self._rating = None
         self._weight_class = None
         self._penalty = None
+        self._strain = None
 
 
 class Shield(Item):
@@ -118,6 +160,12 @@ class State:
         self._burdened = None
 
 
+def init_items(character):
+    character = character
+    character.items = Items(character)
+    new_item = items.new_item("Backpack")
+
+
 class Action:
     def __init__(self):
         self._name = None
@@ -129,3 +177,35 @@ class Action:
 class MajorAction(Action):
     def __init__(self):
         super().__init__()
+
+ITEM_CLASS_DICT = {
+    "Currency": Currency,
+    "Container": Container,
+    "Item": Item,
+    "Lock": Lock,
+    "Tool": Tool,
+    "Missile": Missile,
+    "Traveling": Traveling,
+    "Clothing": Clothing,
+    "Trade Goods": TradeGoods,
+    "Professional Gear": ProfessionalGear,
+    "Home and Hearth": HomeAndHearth,
+    "Food and Lodging": FoodAndLoging,
+    "Weapon": Weapon,
+    "Armor": Armor,
+    "Shield": Shield
+}
+
+
+def new_item(item_name) -> Item:
+    item = None
+    with open('items.csv', 'r') as file:
+        item_db = csv.DictReader(file)
+        for row in item_db:
+            if row['item_name'] == item_name:
+                item_class = row['item_class']
+                class_to_call = ITEM_CLASS_DICT[item_class]
+                item = class_to_call(row)
+
+    return item
+

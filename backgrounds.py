@@ -101,17 +101,17 @@ class Background:
                     self.starting_focus_options.add(row['focus_option_2'])
 
 
-def init_character() -> Background:
+def init_character(character=None) -> Background:
     class_roll = int(input_tools.input_response(
         "Roll for social class",
-        [x for x in range(1, 7)]
+        [str(x) for x in range(1, 7)]
     ))
     rolled_class = SOCIAL_CLASS_ROLLS[class_roll]
     background_dict = BACKGROUND_DICTIONARY[rolled_class]
     print("In your past you were a member of the " + rolled_class + " class.")
     background_roll = int(input_tools.input_response(
         "Roll for specific background",
-        [x for x in range(1, 7)]
+        [str(x) for x in range(1, 7)]
     ))
     rolled_background = background_dict[background_roll]
     background = Background(rolled_background)
@@ -119,6 +119,8 @@ def init_character() -> Background:
         "Choose a focus that fit's your background",
         background.starting_focus_options
     )
+    if character is not None:
+        background.character = character
     return background
 
 
