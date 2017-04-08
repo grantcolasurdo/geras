@@ -70,8 +70,8 @@ class BackgroundFrame(tk.Frame):
             self.character_variables["Character Name"].set(character.full_name)
             self.character_variables["Race"].set(character.race.race_name)
             self.character_variables["Class"].set(character.character_class.class_name)
-            self.character_variables["Background"].set(character.background.background_name)
             self.character_variables["Social Class"].set(character.background.social_class)
+            self.character_variables["Background"].set(character.background.background_name)
         except TypeError:
             print("There was no character selected yet")
 

@@ -14,8 +14,7 @@ def input_response(caption, options=None) -> str:
     return_object = InputObject()
 
     def select(event=None):
-        index = list_box.curselection()[0]
-        value = io_root.data[index]
+        value = list_box.get(tk.ACTIVE)
         io_root.destroy()
         io_root.quit()
         return_object.value = value
@@ -28,10 +27,11 @@ def input_response(caption, options=None) -> str:
     io_root.data = [option for option in options]
     for option in options:
         list_box.insert(tk.END, option)
-    list_box.pack()
+    list_box.pack(fill=tk.BOTH, expand=1)
+    list_box.see(tk.END)
     button = tk.Button(io_root, text="Select", command=select)
     button.pack()
-
+    list_box.focus_set()
     io_root.mainloop()
     return return_object.value
 
@@ -53,6 +53,7 @@ def prompt_text(caption) -> str:
     entry_variable = tk.StringVar()
     entry = tk.Entry(root, textvariable=entry_variable)
     entry.pack()
+    entry.focus_set()
     button = tk.Button(root, text="OK", command=ok)
     button.pack()
     root.mainloop()
