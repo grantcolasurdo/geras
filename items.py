@@ -42,10 +42,13 @@ class Dress:
 
 
 class WearPosition:
-    def __init__(self):
-        self.under = None
-        self.normal = None
-        self.upper = None
+    """Each wear slot can hold 1 clothing or armor item"""
+    def __init__(self, dress: Dress):
+        self.dress = dress
+        self._item = None  # The normal spot for most clothing
+
+
+
 
 
 class Currency(Item):
@@ -55,12 +58,12 @@ class Currency(Item):
 
 class Container(Item):
     def __init__(self, csv_row):
+        super(Container, self).__init__(csv_row)
         self._weight = None
         self.items = set()
         self.volume_capacity = csv_row['volume_capacity']
         self.weight_capacity = csv_row['weight_capacity']
         self.lock = None
-        super(Container, self).__init__(csv_row)
 
     @property
     def weight(self) -> float:
@@ -108,6 +111,7 @@ class Container(Item):
 
 class Weapon(Item):
     def __init__(self, csv_row):
+        super().__init__(csv_row)
         self.damage_rolls = csv_row['weapon_damage']
         self.weapon_group = csv_row['weapon_group']
         self.minimum_strength = csv_row['minimum_strength']
@@ -115,7 +119,6 @@ class Weapon(Item):
         self.long_range = csv_row['short_range']
         self.short_range = csv_row['maximum_range']
         self.minimum_range = csv_row['minimum_range']
-        super().__init__(csv_row)
 
 
 class Missile(Weapon):

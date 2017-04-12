@@ -126,6 +126,47 @@ class Experience(tk.Frame):
             print("There was no character selected yet.")
 
 
+class WeaponGroupsFrame(tk.LabelFrame):
+    def __init__(self, parent, *args, **kwargs):
+        super(WeaponGroupsFrame, self).__init__(parent, *args, **kwargs)
+        self.parent = parent
+        self.root = parent.root
+        self.config(text="Weapon Group Proficiency")
+        self.weapon_group_variables = {
+            "Weapon Groups": tk.StringVar()
+        }
+
+    def update_values(self):
+        try:
+            character = self.parent.character
+            weapon_group_strings = [weapon_group.group_name for weapon_group in character.weapon_groups]
+            self.weapon_group_variables["Weapon Groups"].set('/n'.join(weapon_group_strings))
+        except Exception:
+            print("Something went wrong here")
+
+
+class FocusGroupFrame(tk.LabelFrame):
+    def __init__(self, parent, *args, **kwargs):
+        super(FocusGroupFrame, self).__init__(parent, *args, **kwargs)
+        self.parent = parent
+        self.root = parent.root
+        self.config(text="Known Focuses")
+        self.focus_variables = {
+            "Known Focuses": tk.StringVar()
+        }
+
+
+class TalentGroupFrame(tk.LabelFrame):
+    def __init__(self, parent, *args, **kwargs):
+        super(TalentGroupFrame, self).__init__(parent, *args, **kwargs)
+        self.parent = parent
+        self.root = parent.root
+        self.config(text="Known Talents")
+        self.talent_variables = {
+            ""
+        }
+
+
 class HealthAndArmorFrame(tk.LabelFrame):
     def __init__(self, parent, *args, **kwargs):
         super(HealthAndArmorFrame, self).__init__(parent, *args, **kwargs)
@@ -234,6 +275,7 @@ class CharacterSheet(tk.Frame):
         self.experience_frame = Experience(self)
         self.movement_frame = MovementFrame(self)
         self.health_and_armor_frame = HealthAndArmorFrame(self)
+        self.weapon_groups_frame = WeaponGroupsFrame(self)
         self.magic_frame = MagicFrame(self)
 
         self.root.config(menu=self.menu_bar)
@@ -241,6 +283,7 @@ class CharacterSheet(tk.Frame):
         self.background_frame.grid(row=0, column=0)
         self.experience_frame.grid(row=0, column=1)
         self.movement_frame.grid(row=0, column=2)
+        self.weapon_groups_frame.grid(row=0, column=3)
         self.health_and_armor_frame.grid(row=1, column=1)
         self.magic_frame.grid(row=1, column=2)
 
