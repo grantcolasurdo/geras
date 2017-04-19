@@ -9,7 +9,6 @@ import input_tools
 __author__ = "Grant Colasurdo"
 
 
-
 class Race:
     def __init__(
         self, character=None, name=None, description=None, min_height=None, max_height=None, base_speed=None,
@@ -33,7 +32,7 @@ class Race:
         for entry in self.given_stats:
             function = entry[0]
             arguments = entry[1:]
-            function(self.character, arguments)
+            function(self.character, *arguments, "Race Initialization")
         self.roll_benefit()
 
     def roll_benefit(self):
@@ -44,7 +43,7 @@ class Race:
         benefit_1 = self.benefit_schedule[roll_1]
         function_1 = benefit_1[0]
         args_1 = benefit_1[1:]
-        function_1(self.character, args_1)
+        function_1(self.character, *args_1, "Race Initialization")
         roll_2_same = True
         benefit_2 = []
         while roll_2_same:
@@ -56,7 +55,7 @@ class Race:
             roll_2_same = benefit_2 == benefit_1
         function_2 = benefit_2[0]
         args_2 = benefit_2[1:]
-        function_2(self.character, args_2)
+        function_2(self.character, *args_2, "Race Initialization")
 
 
 class Dwarf(Race):
@@ -70,10 +69,10 @@ class Dwarf(Race):
             base_speed=8,
             dark_sight=True,
             given_stats=[
-                (abilities.level_up, ("Constitution", "Race")),
-                (focuses.acquire_focus, ["Evaluation", "Drinking"]),
-                (languages.add_language, "Dwarven"),
-                (languages.add_language, "Common Tongue")
+                (abilities.level_up, "Constitution"),
+                (focuses.choose_focus, ["Evaluation", "Drinking"]),
+                (languages.add_language, "Dwarven", 3),
+                (languages.add_language, "Common Tongue", 2)
             ],
             female_names={
                 "Ailine", "Dara", "Kalin", "Klara", "Mora",
@@ -117,13 +116,13 @@ class Elf(Race):
             given_stats=[
                 (abilities.level_up, "Dexterity"),
                 (focuses.choose_focus, ["Natural Lore", "Seeing"]),
-                (languages.add_language, "Elven"),
-                (languages.add_language, "Common Tongue")
+                (languages.add_language, "Elven", 3),
+                (languages.add_language, "Common Tongue", 2)
             ],
             benefit_schedule={
                 2: (abilities.level_up, "Communication"),
-                3: (focuses.acquire_focus, "Culteral Lore"),
-                4: (focuses.acquire_focus, "Culteral Lore"),
+                3: (focuses.acquire_focus, "Cultural Lore"),
+                4: (focuses.acquire_focus, "Cultural Lore"),
                 5: (focuses.acquire_focus, "Hearing"),
                 6: (weapon_groups.learn_group, "Bows"),
                 7: (abilities.level_up, "Accuracy"),
@@ -161,8 +160,8 @@ class Gnome(Race):
             given_stats=[
                 (abilities.level_up, "Dexterity"),
                 (focuses.choose_focus, ["Stamina", "Legerdemain"]),
-                (languages.add_language, "Gnomish"),
-                (languages.add_language, "Common Tongue")
+                (languages.add_language, "Gnomish", 3),
+                (languages.add_language, "Common Tongue", 2)
             ],
             benefit_schedule={
                 2: (abilities.level_up, "Constitution"),
@@ -199,8 +198,8 @@ class Halfling(Race):
             given_stats=[
                 (abilities.level_up, "Dexterity"),
                 (focuses.choose_focus, ["Bargaining", "Stealth"]),
-                (languages.add_language, "Halfling"),
-                (languages.add_language, "Common Tongue")
+                (languages.add_language, "Halfling", 3),
+                (languages.add_language, "Common Tongue", 2)
             ],
             benefit_schedule={
                 2: (abilities.level_up, "Perception"),
@@ -237,7 +236,7 @@ class Human(Race):
             given_stats=[
                 (abilities.level_up, "Fighting"),
                 (focuses.choose_focus, ["Riding", "Swimming"]),
-                (languages.add_language, "Common Tongue")
+                (languages.add_language, "Common Tongue", 3)
             ],
             benefit_schedule={
                 2: (abilities.level_up, "Intelligence"),
@@ -278,8 +277,8 @@ class Orc(Race):
             given_stats=[
                 (abilities.level_up, "Strength"),
                 (focuses.choose_focus, ["Stamina", "Might"]),
-                (languages.add_language, "Orcish"),
-                (languages.add_language, "Common Tongue")
+                (languages.add_language, "Orcish", 3),
+                (languages.add_language, "Common Tongue", 2)
             ],
             benefit_schedule={
                 2: (abilities.level_up, "Constitution"),
@@ -319,8 +318,8 @@ class Saurian(Race):
             given_stats=[
                 (abilities.level_up, "Strength"),
                 (focuses.choose_focus, ["Scientific Lore", "Self-Discipline"]),
-                (languages.add_language, "Saurian"),
-                (languages.add_language, "Common Tongue")
+                (languages.add_language, "Saurian", 3),
+                (languages.add_language, "Common Tongue", 2)
             ],
             benefit_schedule={
                 2: (abilities.level_up, "Willpower"),
@@ -354,7 +353,7 @@ RACE_DICT = {
 }
 
 
-def init_race() -> Race:
+def choose_race() -> Race:
     possible_races = {key for key in RACE_DICT}
     selected_race = input_tools.input_response("Choose your race", possible_races)
     character_race = RACE_DICT[selected_race]

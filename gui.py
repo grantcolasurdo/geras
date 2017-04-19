@@ -132,15 +132,16 @@ class WeaponGroupsFrame(tk.LabelFrame):
         self.parent = parent
         self.root = parent.root
         self.config(text="Weapon Group Proficiency")
-        self.weapon_group_variables = {
-            "Weapon Groups": tk.StringVar()
-        }
+        self.list_box = tk.Listbox(self)
+        self.list_box.pack()
 
     def update_values(self):
         try:
             character = self.parent.character
-            weapon_group_strings = [weapon_group.group_name for weapon_group in character.weapon_groups]
-            self.weapon_group_variables["Weapon Groups"].set('/n'.join(weapon_group_strings))
+            weapon_group_strings = [weapon_group.group_name for weapon_group in character.weapon_groups.knwon_groups]
+            self.list_box.delete(0, tk.END)
+            [self.list_box.insert(tk.END, weapon_group) for weapon_group in weapon_group_strings]
+
         except Exception:
             print("Something went wrong here")
 
@@ -151,9 +152,21 @@ class FocusGroupFrame(tk.LabelFrame):
         self.parent = parent
         self.root = parent.root
         self.config(text="Known Focuses")
-        self.focus_variables = {
-            "Known Focuses": tk.StringVar()
-        }
+        self.list_box = tk.Listbox(self)
+        self.list_box.pack()
+
+    def update_values(self):
+        try:
+            character = self.parent.character
+            focus_strings = [
+                focus.focus_name + " (" + focus.ability + ")"
+                for focus in character.focuses.acquired_focuses
+            ]
+            self.list_box.delete(0, tk.END)
+            [self.list_box.insert(tk.END, focus) for focus in focus_strings]
+
+        except Exception:
+            print("Something went wrong updating the focus frame")
 
 
 class TalentGroupFrame(tk.LabelFrame):
@@ -162,9 +175,17 @@ class TalentGroupFrame(tk.LabelFrame):
         self.parent = parent
         self.root = parent.root
         self.config(text="Known Talents")
-        self.talent_variables = {
-            ""
-        }
+        self.list_box = tk.Listbox(self)
+        self.list_box.pack()
+
+    def update_values(self):
+        try:
+            talent_strings = [talent.talent_name for talent in self.parent.character.talents.acquired_talents]
+            self.list_box.delete(0, tk.END)
+            [self.list_box.insert(tk.END, talent) for talent in talent_strings]
+
+        except Exception:
+            print("Something went wrong when updating the talent frame")
 
 
 class HealthAndArmorFrame(tk.LabelFrame):
@@ -197,7 +218,7 @@ class HealthAndArmorFrame(tk.LabelFrame):
             character = self.parent.character
             self.health_and_armor_variables["Health"].set(character.current_health)
             self.health_and_armor_variables["Max Health"].set(character.max_health)
-            defense_value = 10 + character.abilities.dexterity.value + character.equipment.shield_value
+            defense_value = 10 + character.abilities.dexterity + character.equipment.shield_value
             self.health_and_armor_variables["Defense"].set(defense_value)
             armor_value = character.equipment.armor_value
             self.health_and_armor_variables["Armor"].set(armor_value)
@@ -277,15 +298,19 @@ class CharacterSheet(tk.Frame):
         self.health_and_armor_frame = HealthAndArmorFrame(self)
         self.weapon_groups_frame = WeaponGroupsFrame(self)
         self.magic_frame = MagicFrame(self)
+        self.talent_frame = TalentGroupFrame(self)
+        self.focus_frame = FocusGroupFrame(self)
 
         self.root.config(menu=self.menu_bar)
-        self.ability_frame.grid(row=1, column=0)
         self.background_frame.grid(row=0, column=0)
+        self.ability_frame.grid(row=1, column=0)
+        self.focus_frame.grid(row=2, column=0)
         self.experience_frame.grid(row=0, column=1)
-        self.movement_frame.grid(row=0, column=2)
-        self.weapon_groups_frame.grid(row=0, column=3)
         self.health_and_armor_frame.grid(row=1, column=1)
+        self.talent_frame.grid(row=2, column=1)
+        self.movement_frame.grid(row=0, column=2)
         self.magic_frame.grid(row=1, column=2)
+        self.weapon_groups_frame.grid(row=2, column=2)
 
     def pass_command(self):
         pass
@@ -300,9 +325,12 @@ class CharacterSheet(tk.Frame):
         self.ability_frame.update_values()
         self.background_frame.update_values()
         self.experience_frame.update_values()
-        self.movement_frame.update_values()
-        self.health_and_armor_frame.update_values()
+        self.weapon_groups_frame.update_values()
+        self.talent_frame.update_values()
+        self.focus_frame.update_values()
         self.magic_frame.update_values()
+        self.health_and_armor_frame.update_values()
+        self.movement_frame.update_values()
 
 
 def select_option_prompt(caption: str, options: list):

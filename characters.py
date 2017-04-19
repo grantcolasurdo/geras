@@ -14,6 +14,7 @@ import races
 import abilities
 import input_tools
 import languages
+import weapon_groups
 import backgrounds
 
 __author__ = "Grant Colasurdo"
@@ -30,11 +31,10 @@ class Character:
         self.level: int = None
         self.experience_points = None
         self.abilities: abilities.Abilities = None
-        self.focuses: focuses.Focuses = None
-        self.talents: talents.Talents = None
-        self.languages: languages.Languages = None
-        self.weapon_groups: set = None
-        self.talents: set = None
+        self.focuses: focuses.Focuses = focuses.Focuses(self)
+        self.talents: talents.Talents = talents.Talents(self)
+        self.languages: languages.Languages = languages.Languages(self)
+        self.weapon_groups: set = weapon_groups.WeaponGroups(self)
         self.character_class: classes.CharacterClass = None
         self.specializations: set = None
         self.race: races.Race = None
@@ -100,7 +100,9 @@ class Character:
 
     def _choose_race(self):
         self.languages = languages.Languages(self)
-        self.race = races.init_race()(self)
+        race = races.choose_race()
+        self.race = race(character=self)
+        self.race.init_race()
 
     def _determine_background(self):
         self.background = backgrounds.init_character(self)

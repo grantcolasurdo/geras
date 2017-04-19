@@ -84,10 +84,9 @@ class Talents:
         [print(talent.novice_description) for talent in unlearned_pool]
         print("These are the talents that are upgradeable")
         [
-            print(talent.__dict__[level_index_map(talent.level)]) 
+            print(talent.__dict__[level_index_map[talent.level]])
             for talent in known_pool
         ]
-
 
     def acquire_talent(self, talent):
         """acquire the given talent, or add a level to it"""

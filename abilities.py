@@ -16,7 +16,7 @@ DETERMINE_ABILITY_TABLE = {
 
 
 def level_up(character, ability_name, source):
-    character.Abilities.level_up(ability_name, source)
+    character.abilities.level_up(ability_name, source)
 
 
 def ability_greater_than(character, ability_name, compared_to):
@@ -50,6 +50,12 @@ class Ability:
             self.abilities.character.level,
             source
         ))
+
+    def permanent_set(self, value, source):
+        while self.value < value:
+            self.permanent_add(source=source)
+        while self.value > value:
+            self.permanent_subtract(source=source)
 
     @property
     def value(self):
@@ -99,7 +105,7 @@ class Abilities:
             self.ability_map[ability_name].permanent_add(source)
         except AssertionError:
             print(
-                "A bad string value was sent to an Abilities object (" +
+                "A bad value was sent to an Abilities object (" +
                 ability_name + ")"
             )
 
@@ -140,8 +146,8 @@ class Abilities:
             )
 
             first_value = self.ability_map[second_ability].value
-            self.ability_map[first_ability].value = first_value
-            self.ability_map[second_ability].value = second_value
+            self.ability_map[first_ability].permanent_set(first_value, "switch abilites")
+            self.ability_map[second_ability].permanent_set(second_value, "switch abilities")
 
         else:
             pass

@@ -74,10 +74,12 @@ class Focus:
 
     def improve_focus(self):
         """If the focus is able to be improved, improve the focus"""
-        if self.focuses.character.level > 10 and self.level < 2:
+        if self.level < 1:
             self.level += 1
         elif self.level > 1:
             print("Focus is already improved")
+        elif self.focuses.character.level > 10:
+            self.level += 1
         else:
             print("Character is too low a level to improve the focus")
 
@@ -92,11 +94,10 @@ class Focuses:
     acquired_focuses: 
     """
     def __init__(
-        self, character, acquired_focuses=None, all_focuses=None
+        self, character, acquired_focuses=set()
     ):
         self.character = character
         self.acquired_focuses = acquired_focuses
-        self.all_focuses = all_focuses
 
     @property
     def available_focuses(self):
@@ -162,7 +163,7 @@ class Focuses:
         )
         self.acquire_focus(focus_selection)
 
-    def acquire_focus(self, focus_name: str):
+    def acquire_focus(self, focus_name: str, source: str=None):
         """Find the focus from all focuses and append it to the focuses group"""
         if focus_exists(focus_name):
             #  The focus is available, now do we already have it?
@@ -176,7 +177,7 @@ class Focuses:
             try:
                 focus_list = {
                     individual_focus for individual_focus in self.acquired_focuses if
-                    individual_focus.name == focus_name
+                    individual_focus.focus_name == focus_name
                 }
                 assert len(focus_list) < 2
                 if len(focus_list) == 1:
@@ -188,6 +189,11 @@ class Focuses:
                     return target_focus
             except AssertionError:
                 print("There were too many focuses by that name")
+            except TypeError:
+                target_focus = get_focus_from_template(focus_name)
+                target_focus.focuses = self
+                self.acquired_focuses.add(target_focus)
+                return target_focus
         except AssertionError:
             print("The focus you are trying to get does not exist")
 
@@ -198,7 +204,7 @@ class Focuses:
         )
 
 
-def choose_focus(character, focus_choices):
+def choose_focus(character, focus_choices, source=None):
     """List the available choices, and aquire the selected option"""
     focus_selection = input_tools.input_response(
         "These are the focuses you are allowed to chose between", focus_choices
@@ -206,19 +212,19 @@ def choose_focus(character, focus_choices):
     character.focuses.acquire_focus(focus_selection)
 
 
-def acquire_focus(character, focus_name: str):
+def acquire_focus(character, focus_name: str, source: str = None):
     """Add a focus by the name `focus_name` to the character `character`"""
     character.focuses.acquire_focus(focus_name)
 
 
 def focus_exists(focus_name) -> bool:
     """Return True if a focus with the name `focus_name` exits in the world"""
-    return any(template_focus.name == focus_name for template_focus in ALL_FOCUSES)
+    return any(template_focus.focus_name == focus_name for template_focus in ALL_FOCUSES)
 
 
 def get_focus_from_template(focus_name) -> Focus:
     """Search through all focuses and return the one with a name matching focus_name"""
-    qualifying_focuses = [specific_focus for specific_focus in ALL_FOCUSES if focus.focus_name == focus_name]
+    qualifying_focuses = [specific_focus for specific_focus in ALL_FOCUSES if specific_focus.focus_name == focus_name]
     try:
         assert len(qualifying_focuses) == 1
         focus_to_copy = qualifying_focuses[0]
@@ -229,6 +235,7 @@ def get_focus_from_template(focus_name) -> Focus:
             level=focus_to_copy.level,
             description=focus_to_copy.description
         )
+        print("Found focus " + focus_to_return.focus_name + ". Returning to higher function")
         return focus_to_return
     except AssertionError:
         print("That focus doesnt' exist in memory")

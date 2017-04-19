@@ -154,14 +154,14 @@ class Languages:
             
         """
         if not self.is_language_known(language_name):
-            self.add_language(language_name, 0)
+            self.add_language(language_name, 0, "Instantiated from Get call")
         matching_languages = {language for language in self.language_pool if language.name == language_name}
         if len(matching_languages) == 1:
             return matching_languages.pop()
         else:
             print("There were more than 2 languages of that name")
 
-    def add_language(self, language_name, level):
+    def add_language(self, language_name: str, level: int, source: str):
         """Add a new Language to the Languages object at the proficiency level `level`
         
         Parameters
@@ -170,7 +170,8 @@ class Languages:
             The name of the language you are adding
         level: int
             The initial proficiency level the Language should be at
-            
+        source: str
+            The source of the addition
         """
         if not self.is_language_known(language_name):
 
@@ -188,8 +189,8 @@ class Languages:
             )
 
 
-def add_language(character, language_name: str):
+def add_language(character, language_name: str, level: int, source: str):
     try:
-        character.languages.add_language(language_name)
+        character.languages.add_language(language_name, level, source)
     except Exception:
         print("something went wrong when adding a language")

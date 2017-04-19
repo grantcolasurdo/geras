@@ -8,8 +8,8 @@ __author__ = "Grant Colasurdo"
 ALL_WEAPON_GROUPS = set()
 
 
-def learn_group(character, weapon_group: str): 
-    character.weapon_groups.learn_group(weapon_group)
+def learn_group(character, weapon_group: str, source: str = None):
+    character.weapon_groups.learn_group(weapon_group, source)
 
 
 def weapon_group_known(character, weapon_group: str, comparison_dummy):
@@ -26,7 +26,7 @@ class WeaponGroups:
         self.character = character
         self.known_groups = known_groups
 
-    def learn_group(self, group_name):
+    def learn_group(self, group_name, source: str = None):
         if self.is_known(group_name):
             print("Skill already known")
         else:
