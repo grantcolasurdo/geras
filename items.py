@@ -20,7 +20,7 @@ class Item:
         self.hands_to_wield: int = csv_row['hands_to_wield']
 
 
-class Dress:
+class Wear:
     """Handle the meta data for clothing worn by a character
     
     Notes
@@ -30,25 +30,62 @@ class Dress:
     """
     def __init__(self, character):
         self.character = character
-        self.feet = [None]*3
-        self.legs = [None]*3
-        self.waist = [None]*3
-        self.torso = [None]*3
-        self.over_wear = [None]*3
-        self.head = [None]*3
-        self.face = [None]*3
-        self.hands = [None]*3
-        self.back = [None]*3
+        self.feet = WearLocation(self, "Feet", (True, True, True))
+        self.legs = WearLocation(self, "Legs", (True, True, True))
+        self.waist = WearLocation(self, "Waist", (False, True, False))
+        self.torso = WearLocation(self, "Torso", (True, True, True))
+        self.head = WearLocation(self, "Head", (False, True, True))
+        self.face = WearLocation(self, "Face", (False, True, False))
+        self.hands = WearLocation(self, "Hands", (False, True, False))
+        self.back = WearLocation(self, "Back", (False, True, False))
+        self.location_list = {'feet', 'legs', 'waist', 'torso', 'head', 'face', 'hands', 'back'}
+
+    @property
+    def worn_weight(self):
+        return sum({self.__dict__[location].weight for location in self.location_list})
 
 
-class WearPosition:
+class WearSlot:
     """Each wear slot can hold 1 clothing or armor item"""
-    def __init__(self, dress: Dress):
-        self.dress = dress
-        self._item = None  # The normal spot for most clothing
+    def __init__(self, wear_location: WearLocation):
+        self.wear_slot = wear_location
+        self.item = None  # The normal spot for most clothing
+        self.enabled = False  # If the slot is disabled, then no items will not be assignable
+
+    @property
+    def item(self):
+        return self.item
+
+    @item.setter
+    def item(self, value: Item):
+        if self.enabled:
+            self.item = value
+        else:
+            print("This equipment slot is disabled")
+
+    @property
+    def weight(self) -> int:
+        if self.item is None:
+            return 0
+        else:
+            return self.item.weight
 
 
+class WearLocation:
+    """A position on the body that can be equipped with wearable"""
+    def __init__(self, wear: Wear, location_name, enabled_slots):
+        self.wear_root = wear
+        self.location_name = location_name
+        self.under_slot = WearSlot(self)
+        self.middle_slot = WearSlot(self)
+        self.over_slot = WearSlot(self)
+        self.under_slot.enabled = enabled_slots[0]
+        self.middle_slot.enabled = enabled_slots[1]
+        self.over_slot.enabled = enabled_slots[2]
 
+    @property
+    def weight(self):
+        return sum({self.over_slot.weight, self.middle_slot.weight, self.over_slot.weight})
 
 
 class Currency(Item):
@@ -239,11 +276,11 @@ class Equipment:
 
     @property
     def backpack(self):
-        return
+        return self.character.wear.back.item
 
     @backpack.setter
     def backpack(self, value: Container):
-        self.character
+        self.character.wear.back.item = value
 
 ITEM_CLASS_DICT = {
     "Currency": Currency,
@@ -282,6 +319,15 @@ def init_items(character):
     character.equipment = Equipment(character)
     character.items = Items(character)
     starting_items = set()
+    character.wear.back.middle_slot.item = new_item("Backpack")
+    character.wear.shirt.under_slot.item = new_item("Underclothes")
     starting_items.add(new_item("Backpack"))
+    starting_items.add(new_item("Waterskin"))
+    starting_items.add(new_item("Underclothes"))
+    starting_items.add(new_item("Boots"))
+    starting_items.add(new_item("Belt"))
+    starting_items.add(new_item("Pants"))
+    starting_items.add(new_item("Shirt"))
+    starting_items.add(new_item("Jacket"))
 
 

@@ -36,6 +36,7 @@ class Character:
         self.languages: languages.Languages = languages.Languages(self)
         self.weapon_groups: set = weapon_groups.WeaponGroups(self)
         self.character_class: classes.CharacterClass = None
+        self.wear = items.Wear(self)
         self.specializations: set = None
         self.race: races.Race = None
         self.magic: spells.Magic = None
