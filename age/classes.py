@@ -1,6 +1,6 @@
 """Character class information"""
 
-import input_tools as input_tools
+from age import input_tools as input_tools
 
 __author__ = "Grant Colasurdo"
 

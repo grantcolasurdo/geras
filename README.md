@@ -1,8 +1,8 @@
 # Geras
-A Fantasy Age Management Tool
+A Roll Playing Management Tool
 
 ## Purpose
-The idea behind this project is to provide a tool that can be used to track all the small details and interactions in a Fantasy Age roll playing game. Keeping track of a character's focuses, weapon groups, talents, abilities, items, health, calculated stats, etc.. is all a pain and the time spend managing all of these parameters is time spent not on the roll playing itself.
+The idea behind this project is to provide a tool that can be used to track all the small details and interactions in a roll playing game. Keeping track of a character's focuses, weapon groups, talents, abilities, items, health, calculated stats, etc.. is all a pain and the time spend managing all of these parameters is time spent not on the roll playing itself.
 This project is still early Alpha.
 
 ## Long term Goals

@@ -1,6 +1,8 @@
 #! /usr/bin/python
 import sys
-import characters
+
+from age import characters
+
 sys.path.append("~/home/grant/Projects/")
 
 print('geras imported')

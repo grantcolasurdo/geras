@@ -1,8 +1,8 @@
 """Here are all the non-magic talents"""
 
-import classes
 import csv
-import abilities
+
+from age import classes
 
 __author__ = "Grant Colasurdo"
 

@@ -1,8 +1,10 @@
 """This is the root for the GUI"""
 
 import tkinter as tk
+
 import characters
-import abilities
+
+from age import abilities
 
 __author__ = "Grant Colasurdo"
 

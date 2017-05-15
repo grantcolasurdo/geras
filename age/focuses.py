@@ -1,7 +1,8 @@
 """This is where the logic for focuses lie"""
 
 import csv
-import input_tools
+
+from age import input_tools
 
 __author__ = "Grant Colasurdo"
 

@@ -1,6 +1,6 @@
 """This is where abilities will be defined"""
 
-import input_tools
+from age import input_tools
 
 __author__ = "Grant Colasurdo"
 

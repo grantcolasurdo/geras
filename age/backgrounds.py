@@ -3,8 +3,9 @@
 
 """Manage character's backgrounds here"""
 
-import input_tools
 import csv
+
+from age import input_tools
 
 __author__ = "Grant Colasurdo"
 __copyright__ = "Copyright (C) 2017 Grant Colasurdo"

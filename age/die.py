@@ -1,6 +1,7 @@
 """The die rolls are what makes the world go round"""
 
 import random
+import re
 
 __author__ = "Grant Colasurdo"
 
@@ -10,20 +11,20 @@ class DieString:
         self.string = string
         self.die_list = []
         number_of_die = string[:string.find('d')]
-        sides_on_die = string[string.find('d')+1:]
+        sides_on_die = int(string[string.find('d')+1:])
         self.die_list = int(number_of_die) * [Die(sides_on_die)]
 
     def roll(self) -> int:
-        return sum(die.roll for die in self.die_list)
+        return sum(die.roll() for die in self.die_list)
 
 
 class Die:
-    def __init__(self, sides):
+    def __init__(self, sides: int):
         self.sides = sides
 
     def roll(self) -> int:
-        try:
-            return random.randint(1, self.sides)
-        except:
-            print("number of sides was bad")
+        return random.randint(1, self.sides)
 
+
+def make_roll(string: str):
+    pass

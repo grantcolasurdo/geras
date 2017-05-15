@@ -30,15 +30,16 @@ class Wear:
     """
     def __init__(self, character):
         self.character = character
-        self.feet = WearLocation(self, "Feet", (True, True, True))
-        self.legs = WearLocation(self, "Legs", (True, True, True))
-        self.waist = WearLocation(self, "Waist", (False, True, False))
-        self.torso = WearLocation(self, "Torso", (True, True, True))
-        self.head = WearLocation(self, "Head", (False, True, True))
-        self.face = WearLocation(self, "Face", (False, True, False))
-        self.hands = WearLocation(self, "Hands", (False, True, False))
-        self.back = WearLocation(self, "Back", (False, True, False))
-        self.location_list = {'feet', 'legs', 'waist', 'torso', 'head', 'face', 'hands', 'back'}
+        self.armor: WearLocation = WearLocation(self, "Armor", (False, False, True))
+        self.feet: WearLocation = WearLocation(self, "Feet", (True, True, True))
+        self.legs: WearLocation = WearLocation(self, "Legs", (True, True, True))
+        self.waist: WearLocation = WearLocation(self, "Waist", (False, True, False))
+        self.torso: WearLocation = WearLocation(self, "Torso", (True, True, True))
+        self.head: WearLocation = WearLocation(self, "Head", (False, True, True))
+        self.face: WearLocation = WearLocation(self, "Face", (False, True, False))
+        self.hands: WearLocation = WearLocation(self, "Hands", (False, True, False))
+        self.back: WearLocation = WearLocation(self, "Back", (False, True, False))
+        self.location_list = {'armor', 'feet', 'legs', 'waist', 'torso', 'head', 'face', 'hands', 'back'}
 
     @property
     def worn_weight(self):
@@ -152,7 +153,6 @@ class Weapon(Item):
         self.damage_rolls = csv_row['weapon_damage']
         self.weapon_group = csv_row['weapon_group']
         self.minimum_strength = csv_row['minimum_strength']
-        self.state = None
         self.long_range = csv_row['short_range']
         self.short_range = csv_row['maximum_range']
         self.minimum_range = csv_row['minimum_range']
@@ -221,17 +221,10 @@ class FoodAndLodging(Item):
         super(FoodAndLodging, self).__init__(csv_row)
 
 
-class State:
-    def __init__(self):
-        self._name = None
-        self._burdened = None
-
-
 class Equipment:
-    """This will manage the meta level information for the items worn by a character"""
+    """This will manage the meta level information for the items used in combat for a character"""
     def __init__(self, character):
         self.character = character
-        self.all_items = set()  # All the items being worn, not all the item held by the character
         self.primary_hand = None  # Link to an item that the primary hand is holding
         self.secondary_hand = None  # Link to an item that the secondary hand is holding
         self._backpack = None  # Link to an item that is worn on the character's back
@@ -239,7 +232,7 @@ class Equipment:
     @property
     def armor_value(self) -> int:
         """The amount of protection your armor affords you"""
-        return self.armor.rating
+        return self.character.wear.armor.over_slot.item.rating
 
     @property
     def armor_penalty(self) -> int:
@@ -249,16 +242,16 @@ class Equipment:
     @property
     def armor_strain(self):
         """The penalty applied to magic rolls"""
-        return self.armor.strain
+        return self.character.wear.armor.over_slot.strain
 
     @property
     def armor(self) -> Armor:
         """Return the armor object being worn by the character"""
-        return self.character.wear.armor
+        return self.character.wear.armor.over_slot.item
 
     @armor.setter
     def armor(self, value: Armor):
-        self.character.wear.armor = value
+        self.character.wear.armor.over_slot.item = value
 
     @property
     def shield_bonus(self):
@@ -276,11 +269,12 @@ class Equipment:
 
     @property
     def backpack(self):
-        return self.character.wear.back.item
+        """Return the backpack item worn by the character"""
+        return self.character.wear.back.middle_slot.item
 
     @backpack.setter
     def backpack(self, value: Container):
-        self.character.wear.back.item = value
+        self.character.wear.back.middle_slot.item = value
 
 ITEM_CLASS_DICT = {
     "Currency": Currency,
@@ -321,13 +315,11 @@ def init_items(character):
     starting_items = set()
     character.wear.back.middle_slot.item = new_item("Backpack")
     character.wear.shirt.under_slot.item = new_item("Underclothes")
-    starting_items.add(new_item("Backpack"))
+    character.wear.feet.middle_slot.item = new_item("Boots")
+    character.wear.waist.middle_slot.item = new_item("Belt")
+    character.wear.legs.middle_slot.item = new_item("Pants")
+    character.wear.torso.middle_slot.item = new_item("Shirt")
+    character.wear.torso.over_slot.item = new_item("Jacket")
     starting_items.add(new_item("Waterskin"))
-    starting_items.add(new_item("Underclothes"))
-    starting_items.add(new_item("Boots"))
-    starting_items.add(new_item("Belt"))
-    starting_items.add(new_item("Pants"))
-    starting_items.add(new_item("Shirt"))
-    starting_items.add(new_item("Jacket"))
 
 

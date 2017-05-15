@@ -1,61 +1,34 @@
 """Traits of races"""
 
-import abilities
-import weapon_groups
-import focuses
-import languages
-import input_tools
+from fifth_edition import characters
+from fifth_edition import input_tools
+from fifth_edition import languages
+from fifth_edition import abilities
+from fifth_edition import weapon_groups
 
 __author__ = "Grant Colasurdo"
 
 
 class Race:
-    def __init__(
-        self, character=None, name=None, description=None, min_height=None, max_height=None, base_speed=None,
-            dark_sight=None, given_stats=None, female_names=None, male_names=None, family_names=None,
-            benefit_schedule=None
-    ):
+    def __init__(self, character: characters.Character):
         self.character = character
-        self.race_name = name
-        self.description = description
-        self.min_height = min_height
-        self.max_height = max_height
-        self.base_speed = base_speed
-        self.dark_sight = dark_sight
-        self.given_stats = given_stats
-        self.female_names = female_names
-        self.male_names = male_names
-        self.family_names = family_names
-        self.benefit_schedule = benefit_schedule
-
-    def init_race(self):
-        for entry in self.given_stats:
-            function = entry[0]
-            arguments = entry[1:]
-            function(self.character, *arguments, "Race Initialization")
-        self.roll_benefit()
-
-    def roll_benefit(self):
-        roll_1 = input_tools.input_response(
-            "Roll 2d6 for your benefit",
-            range(2, 13)
-        )
-        benefit_1 = self.benefit_schedule[roll_1]
-        function_1 = benefit_1[0]
-        args_1 = benefit_1[1:]
-        function_1(self.character, *args_1, "Race Initialization")
-        roll_2_same = True
-        benefit_2 = []
-        while roll_2_same:
-            roll_2 = input_tools.input_response(
-                "Roll another 2d6 for your other race benefit",
-                range(2, 13)
-            )
-            benefit_2 = self.benefit_schedule[roll_2]
-            roll_2_same = benefit_2 == benefit_1
-        function_2 = benefit_2[0]
-        args_2 = benefit_2[1:]
-        function_2(self.character, *args_2, "Race Initialization")
+        self.race_name = None
+        self.female_names = None
+        self.male_names = None
+        self.family_names = None
+        self.description = None
+        self.ability_score_increases = None
+        self.age_of_majority = None
+        self.lifespan = None
+        self.traditional_alignment = None
+        self.size_class = None
+        self.low_height = None
+        self.high_height = None
+        self.low_weight = None
+        self.high_weight = None
+        self.base_speed = None
+        self.languages = None
+        self.additional_traits = None
 
 
 class Dwarf(Race):
@@ -215,10 +188,17 @@ class Halfling(Race):
                 12: (abilities.level_up, "Accuracy"),
             },
             female_names={
+                "Andry", "Bree", "Callie", "Cora", "Euphemia", "Jillian", "Kithri", "Lavinia",
+                "Lidda", "Merla", "Nedda", "Paela", "Portia", "Seraphina", "Shaena", "Trym", "Vani",
+                "Verna"
             },
             male_names={
+                "Alton", "Ander", "Cade", "Corrin", "Eldon", "Errich", "Finnan", "Garret", "Lindal",
+                "Lyle", "Merric", "Milo", "Osborn", "Perrin", "Reed", "Roscoe", "Wellby"
             },
             family_names={
+                "Brushgather", "Goodbarrel", "Greenbottle", "High-hill", "Hilltopple", "Leagallow",
+                "Tealeaf", "Thorngage", "Tosscobble", "Underbough"
             }
         )
 
