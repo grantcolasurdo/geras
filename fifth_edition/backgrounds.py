@@ -31,14 +31,14 @@ class Background:
     description: str
         The description given in the rulebook
     """
-    def __init__(self, character: characters.Character, background_name: str):
+    def __init__(self, character: 'characters.Character', background_name: str):
         self.character = character
         self.background_name = background_name
         self.description = None
         self.ability_score_increases = set()
         self.proficiencies = set()
         self.languages = set()
-        self.personality_trait:str = None
+        self.personality_trait: str = None
         self.personality_trait_options: dict = None
         self.ideal: str = None
         self.ideal_options: dict = None
@@ -46,10 +46,11 @@ class Background:
         self.bond_options: dict = None
         self.flaw: str = None
         self.flaw_options: dict = None
+        self.starting_items: set = set()
 
 
 class Acolyte(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Acolyte, self).__init__(character, "Acolyte")
         self.proficiencies.add(proficiencies.SkillProficiency("Insight"))
         self.proficiencies.add(proficiencies.SkillProficiency("Religion"))
@@ -95,9 +96,12 @@ class Acolyte(Background):
 
 
 class Charlatan(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Charlatan, self).__init__(character, "Charlatan")
-        self.proficiencies.add(proficiencies.SkillProficiency)
+        self.proficiencies.add(proficiencies.SkillProficiency("Deception"))
+        self.proficiencies.add(proficiencies.SkillProficiency("Sleight of Hand"))
+        self.proficiencies.add(proficiencies.ToolProficiency("Disguise kit"))
+        self.proficiencies.add(proficiencies.ToolProficiency("Forgery kit"))
 
         self.personality_trait_options = {
             "1": "I fall in and out of love easily, and am always pursuing someone.",
@@ -136,7 +140,7 @@ class Charlatan(Background):
 
 
 class Criminal(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Criminal, self).__init__(character, "Criminal")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
@@ -177,7 +181,7 @@ class Criminal(Background):
 
 
 class Entertainer(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Entertainer, self).__init__(character, "Entertainer")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
@@ -218,8 +222,8 @@ class Entertainer(Background):
 
 
 class FolkHero(Background):
-    def __init__(self, character: characters.Character):
-        super(FolkHero, self).__init__(character, "FolkHero")
+    def __init__(self, character: 'characters.Character'):
+        super(FolkHero, self).__init__(character, "Folk Hero")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
         self.personality_trait_options = {
@@ -259,8 +263,8 @@ class FolkHero(Background):
 
 
 class GuildArtisan(Background):
-    def __init__(self, character: characters.Character):
-        super(GuildArtisan, self).__init__(character, "GuildArtisan")
+    def __init__(self, character: 'characters.Character'):
+        super(GuildArtisan, self).__init__(character, "Guild Artisan")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
         self.personality_trait_options = {
@@ -300,7 +304,7 @@ class GuildArtisan(Background):
 
 
 class Hermit(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Hermit, self).__init__(character, "Hermit")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
@@ -341,7 +345,7 @@ class Hermit(Background):
 
 
 class Noble(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Noble, self).__init__(character, "Noble")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
@@ -382,7 +386,7 @@ class Noble(Background):
 
 
 class Outlander(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Outlander, self).__init__(character, "Outlander")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
@@ -423,7 +427,7 @@ class Outlander(Background):
 
 
 class Sage(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Sage, self).__init__(character, "Sage")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
@@ -464,7 +468,7 @@ class Sage(Background):
 
 
 class Sailor(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Sailor, self).__init__(character, "Sailor")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
@@ -505,7 +509,7 @@ class Sailor(Background):
 
 
 class Soldier(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Soldier, self).__init__(character, "Soldier")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
@@ -546,7 +550,7 @@ class Soldier(Background):
 
 
 class Urchin(Background):
-    def __init__(self, character: characters.Character):
+    def __init__(self, character: 'characters.Character'):
         super(Urchin, self).__init__(character, "Urchin")
         self.proficiencies.add(proficiencies.SkillProficiency)
 
@@ -586,22 +590,7 @@ class Urchin(Background):
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def init_character(character: characters.Character) -> Background:
+def init_character(character: 'characters.Character') -> Background:
     pass
 
 

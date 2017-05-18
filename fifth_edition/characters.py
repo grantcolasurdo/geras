@@ -54,12 +54,10 @@ class Character:
         self.current_health: int = None
         self.experience_points = None
         self.initial_abilities: set() = None
-        self.character_class: classes.CharacterClass = None
-        self.wear = items.Wear(self)
+        self.character_classes: set() = None
         self.specializations: set = None
         self.race: races.Race = None
-        self.magic: magic.Magic = None
-        self.inventory = inventory.Inventory
+        #  self.inventory = inventory.Inventory
         self.base_speed: int = None
 
     @property

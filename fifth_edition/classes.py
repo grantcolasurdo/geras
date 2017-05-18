@@ -8,7 +8,7 @@ __author__ = "Grant Colasurdo"
 
 class CharacterClass:
     """The base character class"""
-    def __init__(self, character: characters.Character, class_name: str):
+    def __init__(self, character: 'characters.Character', class_name: str):
         self.character = character
         self.class_name = class_name
         self.description = None

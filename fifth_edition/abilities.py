@@ -62,7 +62,7 @@ class Charisma(Ability):
         super(Charisma, self).__init__("Charisma", score)
 
 
-def sum_ability_sources(ability, character: characters.Character) -> int:
+def sum_ability_sources(ability, character: 'characters.Character') -> int:
     score = 0
     if len(character.initial_abilities) != 0:
         score += sum({item.score for item in character.initial_abilities if isinstance(item, ability)})
