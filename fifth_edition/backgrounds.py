@@ -4,63 +4,14 @@
 """Manage character's backgrounds here"""
 
 import csv
-
-from age import input_tools
+from fifth_edition import characters
+from fifth_edition import abilities
+from fifth_edition import proficiencies
+from fifth_edition import input_tools
 
 __author__ = "Grant Colasurdo"
 __copyright__ = "Copyright (C) 2017 Grant Colasurdo"
 __licence__ = "GPLv2"
-
-SOCIAL_CLASS_ROLLS = {
-    1: "Outsider",
-    2: "Lower",
-    3: "Lower",
-    4: "Middle",
-    5: "Middle",
-    6: "Upper",
-}
-
-BACKGROUND_DICTIONARY = {
-    "Outsider": {
-        1: "Criminal",
-        2: "Exile",
-        3: "Hermit",
-        4: "Pirate",
-        5: "Radical",
-        6: "Wanderer"
-    },
-    "Lower": {
-        1: "Artist",
-        2: "Laborer",
-        3: "Performer",
-        4: "Sailor",
-        5: "Solder",
-        6: "Tradesperson"
-    },
-    "Middle": {
-        1: "Guilder",
-        2: "Initiate",
-        3: "Innkeeper",
-        4: "Merchant",
-        5: "Scribe",
-        6: "Student"
-    },
-    "Upper": {
-        1: "Apprentice",
-        2: "Dilettante",
-        3: "Noble",
-        4: "Official",
-        5: "Scholar",
-        6: "Squire"
-    }
-}
-
-SOCIAL_CLASS_BASE_MONEY = {
-    "Outsider": 15,
-    "Lower": 25,
-    "Middle": 50,
-    "Upper": 100
-}
 
 
 class Background:
@@ -75,54 +26,583 @@ class Background:
     ----------
     character: Character
         The character that the background describes
-    social_class: str
-        The name of the parent social class
+    background_name: str
+        this is the name of the background
     description: str
         The description given in the rulebook
-    starting_focus_options: list of str
-        The focus options available to a character of this class
     """
-    def __init__(
-            self,
-            background_name,
-    ):
-        self.character = None
+    def __init__(self, character: characters.Character, background_name: str):
+        self.character = character
         self.background_name = background_name
-        self.social_class = None
         self.description = None
-        self.starting_focus_options = set()
-        self.chosen_starting_focus = None
-        with open('backgrounds.csv', 'r') as csv_file:
-            background_db = csv.DictReader(csv_file)
-            for row in background_db:
-                if row['name'] == self.background_name:
-                    self.social_class = row['social_class']
-                    self.description = row['description']
-                    self.starting_focus_options.add(row['focus_option_1'])
-                    self.starting_focus_options.add(row['focus_option_2'])
+        self.ability_score_increases = set()
+        self.proficiencies = set()
+        self.languages = set()
+        self.personality_trait:str = None
+        self.personality_trait_options: dict = None
+        self.ideal: str = None
+        self.ideal_options: dict = None
+        self.bond: str = None
+        self.bond_options: dict = None
+        self.flaw: str = None
+        self.flaw_options: dict = None
 
 
-def init_character(character=None) -> Background:
-    class_roll = int(input_tools.input_response(
-        "Roll for social class",
-        [str(x) for x in range(1, 7)]
-    ))
-    rolled_class = SOCIAL_CLASS_ROLLS[class_roll]
-    background_dict = BACKGROUND_DICTIONARY[rolled_class]
-    print("In your past you were a member of the " + rolled_class + " class.")
-    background_roll = int(input_tools.input_response(
-        "Roll for specific background",
-        [str(x) for x in range(1, 7)]
-    ))
-    rolled_background = background_dict[background_roll]
-    background = Background(rolled_background)
-    background.chosen_starting_focus = input_tools.input_response(
-        "Choose a focus that fit's your background",
-        background.starting_focus_options
-    )
-    if character is not None:
-        background.character = character
-    return background
+class Acolyte(Background):
+    def __init__(self, character: characters.Character):
+        super(Acolyte, self).__init__(character, "Acolyte")
+        self.proficiencies.add(proficiencies.SkillProficiency("Insight"))
+        self.proficiencies.add(proficiencies.SkillProficiency("Religion"))
+
+        self.personality_trait_options = {
+            "1": "I idolize a particular hero of my faith, and constantly refer to that person's deeds and example",
+            "2": "I can find common ground between the fiercest enemies, empathizing with them and always working "
+                 "towards peace",
+            "3": "I see omens in every event and action. The gods try to speak to us, we just need to listen",
+            "4": "Nothing can shake my optimistic attitude",
+            "5": "I quote (or misquote) sacred texts and proverbs in almost every situation",
+            "6": "I am tolerant (or intolerant) of other faiths and respect (or condemn) the worship of other gods",
+            "7": "I've enjoyed fine food, drink, and high society among my temple's elite. Rough living grates on me",
+            "8": "I've spent so long in the temple that I have little practical experience dealing with people in "
+                 "the outside world"
+        }
+        self.ideal_options = {
+            "1": "Tradition. The ancient traditions of worship and sacrifice must be preserved and upheld (Lawful)",
+            "2": "Charity. I always try to help those in need, no matter what the personal cost. (Good)",
+            "3": "Change. We must help bring about the changes the gods are constantly working in the world",
+            "4": "Power. I hope to one day rise to the top of my faith's religious hierarchy. (Lawful)",
+            "5": "Faith, I trust that my deity will guide my actions. I have faith that if I work hard, things will go "
+                 "well (Lawful)",
+            "6": "Aspiration. I seek to prove myself worthy of my god's favor by matching my actions against his her "
+                 "her teachings. (Any)"
+        }
+        self.bond_options = {
+            "1": "I would die to recover an ancient relic of my faith that wsa lost long ago",
+            "2": "I will someday get revenge on the corrupt temple hierarchy who branded me a heretic",
+            "3": "I owe my life to the priest who took me in when my parents died",
+            "4": "Everything I do is for the common people",
+            "5": "I will do anything to protect the temple where I served",
+            "6": "I seek to preserve a sacred text that my enemies consider heretical and seek to destroy"
+        }
+        self.flaw_options = {
+            "1": "I judge others harshly, and myself even more severely",
+            "2": "I put too much trust in those who wield power within my temple's hierarchy",
+            "3": "My piety sometimes leads me to blindly trust those that profess faith in my god",
+            "4": "I am inflexible in my thinking",
+            "5": "I am suspicious of strangers and expect the worst of them",
+            "6": "Once I pick a goal, I become obsessed with it to the detriment of everything else in my life"
+        }
+
+
+class Charlatan(Background):
+    def __init__(self, character: characters.Character):
+        super(Charlatan, self).__init__(character, "Charlatan")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "I fall in and out of love easily, and am always pursuing someone.",
+            "2": "I have a joke for every occasion, especially occasions where humor is inappropriate",
+            "3": "Flattery is my preferred trick for getting what I want.",
+            "4": "I'm a born gambler who can't resist taking a risk for a potential payoff",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class Criminal(Background):
+    def __init__(self, character: characters.Character):
+        super(Criminal, self).__init__(character, "Criminal")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class Entertainer(Background):
+    def __init__(self, character: characters.Character):
+        super(Entertainer, self).__init__(character, "Entertainer")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class FolkHero(Background):
+    def __init__(self, character: characters.Character):
+        super(FolkHero, self).__init__(character, "FolkHero")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class GuildArtisan(Background):
+    def __init__(self, character: characters.Character):
+        super(GuildArtisan, self).__init__(character, "GuildArtisan")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class Hermit(Background):
+    def __init__(self, character: characters.Character):
+        super(Hermit, self).__init__(character, "Hermit")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class Noble(Background):
+    def __init__(self, character: characters.Character):
+        super(Noble, self).__init__(character, "Noble")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class Outlander(Background):
+    def __init__(self, character: characters.Character):
+        super(Outlander, self).__init__(character, "Outlander")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class Sage(Background):
+    def __init__(self, character: characters.Character):
+        super(Sage, self).__init__(character, "Sage")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class Sailor(Background):
+    def __init__(self, character: characters.Character):
+        super(Sailor, self).__init__(character, "Sailor")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class Soldier(Background):
+    def __init__(self, character: characters.Character):
+        super(Soldier, self).__init__(character, "Soldier")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+class Urchin(Background):
+    def __init__(self, character: characters.Character):
+        super(Urchin, self).__init__(character, "Urchin")
+        self.proficiencies.add(proficiencies.SkillProficiency)
+
+        self.personality_trait_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": "",
+            "8": ""
+        }
+        self.ideal_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.bond_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+        self.flaw_options = {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def init_character(character: characters.Character) -> Background:
+    pass
 
 
 def get_background(background_name: str, chosen_focus: str) -> Background:

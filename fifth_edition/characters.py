@@ -15,6 +15,7 @@ from fifth_edition import languages
 from fifth_edition import races
 from fifth_edition import magic
 from fifth_edition import inventory
+from fifth_edition import die
 
 __author__ = "Grant Colasurdo"
 
@@ -47,14 +48,12 @@ class Character:
     def __init__(self):
         self._first_name: str = None
         self._last_name: str = None
+        self._sex: str = None
         self._hit_die: set = None
         self.max_health: int = None
         self.current_health: int = None
         self.experience_points = None
-        self.abilities: abilities.Abilities = None
-        self.skills: skills.Skill = talents.Talents(self)
-        self.languages: languages.Languages = languages.Languages(self)
-        self.weapon_groups: set = weapon_groups.WeaponGroups(self)
+        self.initial_abilities: set() = None
         self.character_class: classes.CharacterClass = None
         self.wear = items.Wear(self)
         self.specializations: set = None
@@ -64,7 +63,7 @@ class Character:
         self.base_speed: int = None
 
     @property
-    def full_name(self):
+    def full_name(self) -> str:
         return self.first_name + " " + self.last_name
 
     @property
@@ -84,7 +83,15 @@ class Character:
         self._last_name = value
 
     @property
-    def level(self):
+    def sex(self) -> str:
+        return self._sex
+
+    @sex.setter
+    def sex(self, value: str):
+        self._sex = value
+
+    @property
+    def level(self) -> int:
         level = 1
         if self.experience_points >= 300:
             level += 1
@@ -131,31 +138,44 @@ class Character:
         return self._hit_die
 
     @property
-    def strength(self):
-        return
+    def strength(self) -> abilities.Strength:
+        temp_score = 0
+        temp_score += abilities.sum_ability_sources(abilities.Strength, self.race.ability_score_increases)
+        temp_score += abilities.sum_ability_sources(abilities.Strength, self.ability_score_increases)
+        return abilities.Strength(temp_score)
 
     @property
-    def dexterity(self):
-        return
+    def dexterity(self) -> abilities.Ability:
+        temp_score = 0
+        temp_score += abilities.sum_ability_sources(abilities.Dexterity, self.race.ability_score_increases)
+        return abilities.Dexterity(temp_score)
 
     @property
-    def constitution(self):
-        return
+    def constitution(self) -> abilities.Ability:
+        temp_score = 0
+        temp_score += abilities.sum_ability_sources(abilities.Constitution, self.race.ability_score_increases)
+        return abilities.Constitution(temp_score)
 
     @property
-    def intelligence(self):
-        return
+    def intelligence(self) -> abilities.Ability:
+        temp_score = 0
+        temp_score += abilities.sum_ability_sources(abilities.Intelligence, self.race.ability_score_increases)
+        return abilities.Intelligence(temp_score)
 
     @property
-    def wisdom(self):
-        return
+    def wisdom(self) -> abilities.Ability:
+        temp_score = 0
+        temp_score += abilities.sum_ability_sources(abilities.Wisdom, self.race.ability_score_increases)
+        return abilities.Wisdom(temp_score)
 
     @property
-    def charisma(self):
-        return
+    def charisma(self) -> abilities.Ability:
+        temp_score = 0
+        temp_score += abilities.sum_ability_sources(abilities.Charisma, self.race.ability_score_increases)
+        return abilities.Charisma(temp_score)
 
     @property
-    def proficiency_bonus(self):
+    def proficiency_bonus(self) -> int:
         return (self.level - 1) // 4 + 2
 
     def rest(self):
@@ -166,33 +186,18 @@ class Character:
     def init_new_character(self):
         """
         The guidebook shows the character creation process in 9 points
-        1. Create a character concept
-        2. Determine abilities
-        3. Choose a race
-        4. determine a social class an background
-        5. choose a class
-        6. pick a starting equipment
-        7. calculate defense
-        8. pick a name
-        9. choose goals and character ties for your character
+        1. Choose a race
+        2. Choose a class
+        3. Determine ability scores
+        4. Choose a background
+        5. Choose equipment
         """
-        self._create_character_concept()
-        self._determine_abilities()
-        self._choose_race()
-        self._determine_background()
-        self._choose_class()
-        self._pick_starting_equipment()
-        self._calculate_defense()
-        self._pick_name()
-        self._choose_goals_and_ties()
-
-    def _create_character_concept(self):
-        self.level = 1
         self.experience_points = 0
-
-    def _determine_abilities(self):
-        self.abilities = abilities.Abilities(self)
-        self.abilities.init_abilities()
+        self._choose_race()
+        self._choose_class()
+        self._determine_abilities()
+        self._determine_background()
+        self._pick_starting_equipment()
 
     def _choose_race(self):
         self.languages = languages.Languages(self)
@@ -201,17 +206,19 @@ class Character:
         self.race = race
         self.race.init_race()
 
-    def _determine_background(self):
-        self.background = backgrounds.init_character(self)
-
     def _choose_class(self):
         self.character_class = classes.init_class()(self)
 
+    def _determine_background(self):
+        self.background = backgrounds.init_character(self)
+
+    def _determine_abilities(self):
+
+        self.abilities = abilities.Abilities(self)
+        self.abilities.init_abilities()
+
     def _pick_starting_equipment(self):
         items.init_items(self)
-
-    def _calculate_defense(self):
-        pass
 
     def _pick_name(self):
         self.first_name = input_tools.prompt_text(
@@ -222,9 +229,6 @@ class Character:
         )
         print("Hello, " + " ".join((self.first_name, self.last_name)))
 
-    def _choose_goals_and_ties(self):
-        pass
-
 
 def dark_sight(character: Character, value: bool):
     character.dark_sight = value
@@ -232,3 +236,4 @@ def dark_sight(character: Character, value: bool):
 
 def base_speed(character: Character, value: int):
     character.base_speed = value
+
