@@ -212,8 +212,31 @@ class Character:
 
     def _determine_abilities(self):
 
-        self.abilities = abilities.Abilities(self)
-        self.abilities.init_abilities()
+        ability_options = {
+            "Standard D&D": self._d_and_d_init_abilities,
+            "Purchase with Points": self._purchase_abilities,
+            "I'm feeling lucky": self._roll_abilities
+        }
+        ability_function = ability_options[
+            input_tools.input_response(
+                "How would you like to determine your starting abilities?",
+                ability_options
+            )
+        ]
+        ability_function()
+
+    def _d_and_d_init_abilities(self):
+        ability_list = {ability for ability in abilities.ABILITY_LIST}
+        score_list = [15, 14, 13, 12, 10, 8]
+        choice_list = set()
+        while len(score_list) > 0:
+            iterator
+
+    def _purchase_abilities(self):
+        pass
+
+    def _roll_abilities(self):
+        pass
 
     def _pick_starting_equipment(self):
         items.init_items(self)
