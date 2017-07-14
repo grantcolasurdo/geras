@@ -1,17 +1,14 @@
 """Manage the inventory of a character"""
 
-from fifth_edition import items
-from fifth_edition import characters
+from fifth_edition import items, characters
 
 
 class Armor:
     def __init__(self, character: 'characters.Character'):
         self.character = character
         
-        
     @property
     def armor_class(self):
-
         return
 
     @property

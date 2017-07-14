@@ -5,17 +5,8 @@ based roll playing game. The template that I'm building this off of is Titan's
 Grave.
 """
 
-from fifth_edition import abilities
-from fifth_edition import backgrounds
-from fifth_edition import classes
-from fifth_edition import skills
-from fifth_edition import input_tools
+from fifth_edition import abilities, races, languages, backgrounds, classes, input_tools, inventory, magic
 from fifth_edition import items
-from fifth_edition import languages
-from fifth_edition import races
-from fifth_edition import magic
-from fifth_edition import inventory
-from fifth_edition import die
 
 __author__ = "Grant Colasurdo"
 
@@ -55,9 +46,11 @@ class Character:
         self.experience_points = None
         self.initial_abilities: set() = None
         self.character_classes: set() = None
+        self._class_level_list = [None] * 20
         self.specializations: set = None
         self.race: races.Race = None
         #  self.inventory = inventory.Inventory
+        self.magic: magic = None
         self.base_speed: int = None
 
     @property
@@ -90,50 +83,19 @@ class Character:
 
     @property
     def level(self) -> int:
-        level = 1
-        if self.experience_points >= 300:
-            level += 1
-        if self.experience_points >= 900:
-            level += 1
-        if self.experience_points >= 2700:
-            level += 1
-        if self.experience_points >= 6500:
-            level += 1
-        if self.experience_points >= 14000:
-            level += 1
-        if self.experience_points >= 23000:
-            level += 1
-        if self.experience_points >= 34000:
-            level += 1
-        if self.experience_points >= 48000:
-            level += 1
-        if self.experience_points >= 64000:
-            level += 1
-        if self.experience_points >= 85000:
-            level += 1
-        if self.experience_points >= 100000:
-            level += 1
-        if self.experience_points >= 120000:
-            level += 1
-        if self.experience_points >= 140000:
-            level += 1
-        if self.experience_points >= 165000:
-            level += 1
-        if self.experience_points >= 195000:
-            level += 1
-        if self.experience_points >= 225000:
-            level += 1
-        if self.experience_points >= 265000:
-            level += 1
-        if self.experience_points >= 305000:
-            level += 1
-        if self.experience_points >= 355000:
-            level += 1
-        return level
+        level_return = 0
+        for level in range(1, len(EXPERIENCE_TABLE) + 1):
+            if self.experience_points > EXPERIENCE_TABLE[level]:
+                level_return += 1
+        return level_return
 
     @property
     def hit_die(self) -> set:
-        return self._hit_die
+        return_set = set()
+        for character_class in self._class_level_list:
+            if isinstance(character_class, classes.CharacterClass):
+                return_set.add(character_class.hit_die)
+        return return_set
 
     @property
     def strength(self) -> abilities.Strength:
@@ -198,7 +160,7 @@ class Character:
         self._pick_starting_equipment()
 
     def _choose_race(self):
-        self.languages = languages.Languages(self)
+        self.languages = set()
         race = races.choose_race()
         race.character = self
         self.race = race
@@ -225,12 +187,12 @@ class Character:
         ]
         ability_function()
 
-    def _d_and_d_init_abilities(self):
-        ability_list = {ability for ability in abilities.ABILITY_LIST}
-        score_list = [15, 14, 13, 12, 10, 8]
-        choice_list = set()
-        while len(score_list) > 0:
-            iterator
+#    def _d_and_d_init_abilities(self):
+#        ability_list = {ability for ability in abilities.ABILITY_LIST}
+#        score_list = [15, 14, 13, 12, 10, 8]
+#        choice_list = set()
+#        while len(score_list) > 0:
+#            iterator
 
     def _purchase_abilities(self):
         pass
@@ -257,4 +219,3 @@ def dark_sight(character: Character, value: bool):
 
 def base_speed(character: Character, value: int):
     character.base_speed = value
-

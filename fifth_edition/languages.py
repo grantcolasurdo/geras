@@ -172,3 +172,41 @@ class Undercommon(Language):
         self.can_wright = can_write
         self.written_script = Elvish
 
+
+ALL_LANGUAGES = {
+    "Common": Common,
+    "Dwarvish": Dwarvish,
+    "Elvish": Elvish,
+    "Giant": Giant,
+    "Gnomish": Gnomish,
+    "Goblin": Goblin,
+    "Halfling": Halfling,
+    "Orc": Orc,
+    "Abyssal": Abyssal,
+    "Celestial": Celestial,
+    "Draconic": Draconic,
+    "Deep Speech": DeepSpeech,
+    "Infernal": Infernal,
+    "Primordial": Primordial,
+    "Sylvan": Sylvan,
+    "Undercommon": Undercommon
+}
+
+LANGUAGE_SET = {
+    Common,
+    Dwarvish,
+    Elvish,
+    Giant,
+    Gnomish,
+    Goblin,
+    Halfling,
+    Orc,
+    Abyssal,
+    Celestial,
+    Draconic,
+    DeepSpeech,
+    Infernal,
+    Primordial,
+    Sylvan,
+    Undercommon
+}

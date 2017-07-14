@@ -1,7 +1,6 @@
 """The die rolls are what makes the world go round"""
 
 import random
-import re
 
 __author__ = "Grant Colasurdo"
 
@@ -26,5 +25,5 @@ class Die:
         return random.randint(1, self.sides)
 
 
-def make_roll(string: str):
+def make_roll():
     pass

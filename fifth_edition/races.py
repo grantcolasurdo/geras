@@ -34,6 +34,36 @@ class Race:
         self.damage_resistances = set()
         self.hit_point_bonus = 0
 
+    def init_race(self):
+        self._define_gender()
+        self._define_name()
+        self._define_height()
+        self._define_weight()
+        self._define_allignment()
+
+    def _define_gender(self):
+        self.character.sex = input_tools.input_response("Choose a gender", ["Male", "Female", "Triggered"])
+        if self.character.sex == "Triggered":
+            self.character.sex = input_tools.input_response("Try Again", ["Male", "Female"])
+
+    def _define_name(self):
+        if self.character.sex == "Male":
+            print("These are the common male names for this race")
+        else:
+            print("These are the common female names for this race")
+
+        self.character.first_name = input_tools.input_response("First Name")
+        input_tools.input_response("First Name")
+
+    def _define_height(self):
+        pass
+
+    def _define_weight(self):
+        pass
+
+    def _define_allignment(self):
+        pass
+
 
 class Dwarf(Race):
     RACE_NAME = "Dwarf"

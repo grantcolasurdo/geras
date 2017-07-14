@@ -15,9 +15,4 @@ for name in races.RACE_DICT:
     print(instance.HEIGHT_MODIFIER)
     print(instance.FAMILY_NAMES)
     print(instance.BASE_SPEED)
-    print(instance.BASE_SPEED)
-    print(instance.BASE_SPEED)
-    print(instance.BASE_SPEED)
-    print(instance.BASE_SPEED)
-    print(instance.BASE_SPEED)
-    print(instance.BASE_SPEED)
+

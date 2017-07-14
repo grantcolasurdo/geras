@@ -1,7 +1,6 @@
 """Character class information"""
 
-from fifth_edition import input_tools
-from fifth_edition import characters
+from fifth_edition import input_tools, characters, die
 
 __author__ = "Grant Colasurdo"
 
@@ -13,18 +12,24 @@ class CharacterClass:
         self.class_name = class_name
         self.description = None
         self.ability_score_increases: set = set()
-        self.hit_die: str = None
+        self._hit_die: die.Die = None
+        self.starting_health: int = None
         self.starting_equipment: set = set()
 
+    @property
+    def hit_die(self) -> die.Die:
+        return self._hit_die
+
+    @hit_die.setter
+    def hit_die(self, value: str):
+        self._hit_die = die.DieString(value)
+
     def calculate_starting_health(self):
-        die_roll = int(input_tools.input_response(
-            "Roll 1d6 for your starting health calculation",
-            [str(x) for x in range(1, 7)]
-        ))
+        die_roll = self.hit_die.roll()
         constitution = self.character.abilities.constitution.value
-        starting_health = die_roll + constitution + self.base_health
+        starting_health = die_roll + constitution
         print("Your character now has a maximum health of " + str(starting_health))
-        return die_roll + constitution + self.base_health
+        return constitution + self.hit_die.sides
 
     def init_class(self):
         self.character.max_health = self.calculate_starting_health()
