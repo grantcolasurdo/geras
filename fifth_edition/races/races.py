@@ -61,7 +61,7 @@ class Race:
     def _define_weight(self):
         pass
 
-    def _define_allignment(self):
+    def _define_alignment(self):
         pass
 
 

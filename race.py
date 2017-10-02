@@ -1,28 +1,46 @@
 """Traits of races"""
 
 import abilities
+import characters
 import focuses
 import input_tools
 import languages
+import weapon_groups
 
-from age import weapon_groups
+from fifth_edition import alignment
 
 __author__ = "Grant Colasurdo"
 
 
 class Race:
     def __init__(
-        self, character=None, name=None, description=None, min_height=None, max_height=None, base_speed=None,
-            dark_sight=None, given_stats=None, female_names=None, male_names=None, family_names=None,
-            benefit_schedule=None
-    ):
+        self,
+            character:  characters.Character= None,
+            name: str = None,
+            description: str = None,
+            age_of_attainment: int = None,
+            lifespan: int = None,
+            min_height: float = None,
+            max_height: float = None,
+            base_speed: int = None,
+            dark_sight: bool = None,
+            natural_alignment: alignment.Alignment = None,
+            given_stats: list = None,
+            female_names: list = None,
+            male_names:  list = None,
+            family_names: list = None,
+            benefit_schedule: object = None
+    ) -> None:
         self.character = character
         self.race_name = name
         self.description = description
+        self.age_of_attainment = age_of_attainment
+        self.lifespan = lifespan
         self.min_height = min_height
         self.max_height = max_height
         self.base_speed = base_speed
         self.dark_sight = dark_sight
+        self.natural_alignment = natural_alignment
         self.given_stats = given_stats
         self.female_names = female_names
         self.male_names = male_names

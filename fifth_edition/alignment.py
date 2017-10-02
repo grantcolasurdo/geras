@@ -1,89 +1,127 @@
-"""Categorizing the alignment in D&D"""
+"""Alignment object class"""
 
 __author__ = "Grant Colasurdo"
 
 
 class Alignment:
-    def __init__(self, short_form):
-        self._lawful = None
-        self._chaotic = None
-        self._good = None
-        self._evil = None
-        self.short_form = short_form
+    SHORT_TO_LONG = {
+        'N': 'Neutral',
+        'G': 'Good',
+        'E': 'Evil',
+        'C': 'Chaotic',
+        'L': 'Lawful',
+        '': ''
+    }
+
+    def __init__(self, short_string: str=""):
+
+        if "L" in short_string:
+            self._LawChaos = "L"
+        if "C" in short_string:
+            self._LawChaos = "C"
+        if "G" in short_string:
+            self._GoodEvil = "G"
+        if "E" in short_string:
+            self._GoodEvil = "E"
+        if "N" in short_string:
+            if "NG" in short_string or "NE" in short_string:
+                self._LawChaos = "N"
+            if "LN" in short_string or "CN" in short_string:
+                self._GoodEvil = "N"
+            if short_string == "N":
+                self._LawChaos = "N"
+                self._GoodEvil = "N"
 
     @property
-    def short_form(self) -> str:
-        string = []
-        if self._lawful:
-            string.append("L")
-        elif self._chaotic:
-            string.append("C")
-        else:
-            string.append("N")
-        if self._good:
-            string.append("G")
-        elif self._evil:
-            string.append("E")
-        else:
-            string.append("N")
-        if "".join(string) == "NN":
-            string.pop()
-        return "".join(string)
-
-    @short_form.setter
-    def short_form(self, value: str):
-        self._lawful = False
-        self._chaotic = False
-        self._evil = False
-        self._good = False
-        if "L" in value:
-            self._lawful = True
-            self._chaotic = False
-        elif "C" in value:
-            self._chaotic = True
-            self._lawful = False
-        if "E" in value:
-            self._evil = True
-            self._good = False
-        elif "G" in value:
-            self._good = True
-            self._evil = False
+    def short_string(self):
+        string = self._LawChaos + self._GoodEvil
+        if string == "NN":
+            string = "N"
+        return string
 
     @property
-    def long_form(self):
-        string = []
-        if self._lawful:
-            string.append("Lawful")
-        if self._chaotic:
-            string.append("Chaotic")
-        if self._good:
-            string.append("Good")
-        if self._evil:
-            string.append("Evil")
-        if len(string) == 0:
-            string.append("True")
-            string.append("Neutral")
-        elif len(string) == 2:
+    def long_string(self):
+        law_chaos = self.short_to_long[self._LawChaos]
+        good_evil = self.short_to_long[self._GoodEvil]
+        string = (law_chaos + " " + good_evil).strip()
+        if string == "Neutral Neutral":
+            string = "True Neutral"
+        return string
+
+    @property
+    def is_lawful(self):
+        return self._LawChaos == "L"
+
+    @is_lawful.setter
+    def is_lawful(self, value: bool):
+        if value:
+            self._LawChaos = "L"
+        elif self.is_lawful:
+            self._LawChaos = ""
+        else:
             pass
-        else:
-            string.append("Neutral")
-        return " ".join(string)
 
-    @long_form.setter
-    def long_form(self, value):
-        self._lawful = False
-        self._chaotic = False
-        self._evil = False
-        self._good = False
-        if "Lawful" in value:
-            self._lawful = True
-            self._chaotic = False
-        elif "Chaotic" in value:
-            self._chaotic = True
-            self._lawful = False
-        if "Evil" in value:
-            self._evil = True
-            self._good = False
-        elif "Good" in value:
-            self._good = True
-            self._evil = False
+    @property
+    def is_good(self):
+        return self._GoodEvil == "G"
+
+    @is_good.setter
+    def is_good(self, value: bool):
+        if value:
+            self._GoodEvil = "G"
+        elif self.is_good:
+            self._GoodEvil = ""
+        else:
+            pass
+
+    @property
+    def is_chaotic(self):
+        return self._LawChaos == "C"
+
+    @is_chaotic.setter
+    def is_chaotic(self, value: bool):
+        if value:
+            self._LawChaos = "C"
+        elif self.is_chaotic:
+            self._LawChaos = ""
+        else:
+            pass
+
+    @property
+    def is_evil(self):
+        return self._GoodEvil == "E"
+
+    @is_evil.setter
+    def is_evil(self, value: bool):
+        if value:
+            self._GoodEvil = "E"
+        elif self.is_evil:
+            self._GoodEvil = ""
+        else:
+            pass
+
+    @property
+    def is_neutral_law_chaos(self):
+        return self._LawChaos == "N"
+
+    @is_neutral_law_chaos.setter
+    def is_neutral_law_chaos(self, value: bool):
+        if value:
+            self._LawChaos = "N"
+        elif self.is_neutral_law_chaos:
+            self._LawChaos = ""
+        else:
+            pass
+
+    @property
+    def is_neutral_good_evil(self):
+        return self._GoodEvil == "N"
+
+    @is_neutral_good_evil.setter
+    def is_neutral_good_evil(self, value: bool):
+        if value:
+            self._GoodEvil = "N"
+        elif self.is_neutral_good_evil:
+            self._GoodEvil = ""
+        else:
+            pass
